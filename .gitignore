@@ -1,0 +1,11 @@
+
+# Normal Things
+.DS_Store
+.env
+*.log
+
+
+# Node
+node_modules/
+coverage/
+dist/
