@@ -2,7 +2,7 @@
   "name": "node_demo_project",
   "version": "1.0.0",
   "description": "The sample Node.js project for CPSC304.",
-  "main": "server.js",
+  "main": "backend/server.js",
   "keywords": [],
   "author": {
     "name": "Zoe Yuan"

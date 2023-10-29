@@ -7,4 +7,4 @@ cd "$(dirname "$0")"
 export DYLD_LIBRARY_PATH=/Users/bokyu/Desktop/instantclient_19_8:$DYLD_LIBRARY_PATH
 
 # Start Node application
-exec node server.js
+exec node ./src/server.js
