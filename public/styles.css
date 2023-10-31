@@ -26,7 +26,6 @@ header {
 
 .links a {
     margin: 0 20px;
-}
-
-.login {
+    text-decoration: none;
+    color: #000;
 }
