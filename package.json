@@ -9,7 +9,11 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@libsql/client": "^0.3.6",
+    "body-parser": "^1.20.2",
     "express": "^4.17.3",
-    "oracledb": "^5.2.0"
+    "nodemon": "^3.0.1",
+    "oracledb": "^5.2.0",
+    "pug": "^3.0.2"
   }
 }
