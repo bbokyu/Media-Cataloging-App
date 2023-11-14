@@ -1,0 +1,40 @@
+DOCTYPE(html)
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title Grocery List
+       
+        script(src="https://unpkg.com/hyperscript.org@0.9.11")
+        script(src="https://unpkg.com/htmx.org@1.9.8")
+    body
+        nav(class="flex nav")
+            h1(class="h1 mb-0") Media
+        
+        h2(clas="h2 mb-0") Books
+        table(class="table table-striped")
+            thead
+                tr
+                    th(class="table-secondary") Title
+                    th(class="table-secondary") Date
+            tbody(id="books" hx-target="closest tr" hx-swap="outerHTML")
+                each book in books
+                    tr
+                        td= book[1]
+                        td= book[2]
+
+        h2(clas="h2 mb-0") Films
+        table(class="table table-striped")
+            thead
+                tr
+                    th(class="table-secondary") Title
+                    th(class="table-secondary") Date
+                    th(class="table-secondary") Genres
+                    th(class="table-secondary") Duration
+            tbody(id="books" hx-target="closest tr" hx-swap="outerHTML")
+                each film in films
+                    tr
+                        td= film[1]
+                        td= film[2]
+                        td= film[4]
+                        td= film[5]

@@ -1,0 +1,21 @@
+DOCTYPE(html)
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title Grocery List
+       
+        script(src="https://unpkg.com/hyperscript.org@0.9.11")
+        script(src="https://unpkg.com/htmx.org@1.9.8")
+    body
+        nav(class="flex nav")
+            h1(class="h1 mb-0") Search
+        input.form-control(type="text" name="search" placeholder='Begin Typing To Search Media...' hx-post='/api/media/search' hx-trigger='input changed delay:500ms, search' hx-target='#search-results', hx-swap="outerHTML")
+
+        table
+              thead
+                    tr
+                        th Type
+                        th Title
+                        th Date
+              tbody(id="search-results" hx-target="closest tr")
