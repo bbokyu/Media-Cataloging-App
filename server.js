@@ -11,7 +11,7 @@ const app = express();
 const PORT = envVariables.PORT || 65534;  // Adjust the PORT if needed (e.g., if you encounter a "port already occupied" error)
 
 // Enable pug
-const pug = require('pug')
+const pug = require('pug');
 app.set("view engine", "pug")
 
 // Middleware setup
@@ -34,7 +34,9 @@ app.use('/', appController);
 
 // Media Routes
 const mediaRoutes = require('./routes/mediaRoutes')
+const mediaApi = require('./api/media')
 app.use('/media', mediaRoutes);
+app.use('/api/media', mediaApi);
 
 // ----------------------------------------------------------
 // Starting the server
