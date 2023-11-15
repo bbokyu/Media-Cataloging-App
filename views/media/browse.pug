@@ -13,7 +13,8 @@ block content
         tbody(id="books" hx-target="closest tr" hx-swap="outerHTML")
             each book in books
                 tr
-                    td= book[1]
+                    td 
+                        a(href=`/media/book/` + book[0]) #{book[1]}
                     td= book[2]
 
     h2(clas="h2 mb-0") Films
