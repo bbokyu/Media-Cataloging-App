@@ -4,6 +4,12 @@ const db = require('../appService');
 
 const root = 'media/'
 
+const Type = Object.freeze({
+    BOOK: 0,
+    FILM: 1,
+    MUSIC: 2
+});
+
 // All these routes fall under views/media
 
 router.get("/", async(req, res) => {
@@ -34,7 +40,18 @@ router.get("/book/:id", async (req, res) => {
     const id = req.params.id;
     try {
         const book_data = await db.execute("SELECT * FROM \"Book\" WHERE \"id\" = " + id);
-        res.render(root + "item", {root:root, book:book_data[0]});
+        res.render(root + "item", {root:root, book:book_data[0], type:Type.BOOK});
+    } catch (Error) {
+        res.status(404).json({ error: "Media not found." });
+    }
+});
+
+router.get("/film/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const film_data = await db.execute("SELECT * FROM \"Film\" WHERE \"id\" = " + id);
+        console.log(film_data[0]);
+        res.render(root + "item", {root:root, film:film_data[0], type:Type.FILM});
     } catch (Error) {
         res.status(404).json({ error: "Media not found." });
     }
