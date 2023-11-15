@@ -29,3 +29,52 @@ header {
     text-decoration: none;
     color: #000;
 }
+
+/* Default styles for the cwrapper div */
+.cwrapper {
+  max-width: 800px; /* Set your desired maximum width */
+  margin: 0 auto;
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  padding: 20px;    /* Add padding for better readability, adjust as needed */
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 600px) {
+  .cwrapper {
+    max-width: none; /* Remove the maximum width for smaller screens */
+  }
+}
+
+/*TABLE STYLES*/
+
+table {
+	width: 100%;
+	border-spacing: 0;
+	border-collapse: collapse;
+	text-align: left;
+	border: .1rem solid #bfbfbf;
+}
+
+thead {
+    color: black;
+    background-color: #eee;
+    border-color: #000;
+    border-style: solid;
+    box-sizing: inherit;
+    border-width: 1px;
+    padding: 4px;
+}
+
+table th {
+	font-weight: 600;
+	padding: .3rem .6rem .3rem;
+	border-bottom: .1rem solid #000;
+}
+
+table td {
+	padding: .15rem .6rem .15rem;
+	border-bottom: .1rem solid #bfbfbf;
+    vertical-align: middle;
+}

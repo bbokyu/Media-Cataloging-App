@@ -1,0 +1,21 @@
+DOCTYPE(html)
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title EpicMediaHub
+        link(rel='stylesheet', href='/styles.css')
+        script(src="https://unpkg.com/hyperscript.org@0.9.11")
+        script(src="https://unpkg.com/htmx.org@1.9.8")
+    body
+        header
+            .logo EpicMediaHub
+            .links
+                a(href='/media') Browse
+                a(href='/library') My Library
+                a(href='clubs') Clubs
+                a(href='profile') Profile
+                a(href='search') Search
+            .login Login/Sign Up
+        div.cwrapper
+            block content 

@@ -35,6 +35,7 @@ app.use('/', appController);
 // Media Routes
 const mediaRoutes = require('./routes/mediaRoutes')
 const mediaApi = require('./api/media')
+
 app.use('/media', mediaRoutes);
 app.use('/api/media', mediaApi);
 

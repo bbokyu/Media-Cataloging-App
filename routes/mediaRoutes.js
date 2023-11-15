@@ -6,6 +6,10 @@ const root = 'media/'
 
 // All these routes fall under views/media
 
+router.get("/", async(req, res) => {
+    res.redirect('/media/browse');
+});
+
 router.get("/browse", async (req, res) => {
     try {
         const book_data = await db.execute("SELECT * FROM \"Book\" ORDER BY dbms_random.value FETCH FIRST 20 ROWS ONLY");
@@ -24,6 +28,16 @@ router.get("/search", async (req, res) => {
     } catch (Error) {
         res.status(500).json({ error: "An error occured while rendering the page." });
     }
-})
+});
+
+router.get("/book/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const book_data = await db.execute("SELECT * FROM \"Book\" WHERE \"id\" = " + id);
+        res.render(root + "item", {root:root, book:book_data[0]});
+    } catch (Error) {
+        res.status(404).json({ error: "Media not found." });
+    }
+});
 
 module.exports = router;
