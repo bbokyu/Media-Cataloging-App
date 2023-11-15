@@ -22,10 +22,11 @@ router.post("/search", async (req, res) => {
 
         // Deal with book data
         for (let i = 0; i < book_data.length; i++) {
+            const id = book_data[i][0]
             const title = book_data[i][1]
             const date = book_data[i][2]
 
-            tableHtml += `<tr><td>Book</td><td>${title}</td><td>${date}</td></tr>\n`;
+            tableHtml += `<tr><td>Book</td><td><a href='/media/book/${id}'>${title}</a></td><td>${date}</td></tr>\n`;
         }
 
 
@@ -34,10 +35,11 @@ router.post("/search", async (req, res) => {
 
         // Deal with film data
         for (let i = 0; i < film_data.length; i++) {
+            const id = film_data[i][0]
             const title = film_data[i][1]
             const date = film_data[i][2]
 
-            tableHtml += `<tr><td>Film</td><td>${title}</td><td>${date}</td></tr>\n`;
+            tableHtml += `<tr><td>Film</td><td><a href='/media/film/${id}'>${title}</a></td><td>${date}</td></tr>\n`;
         }
 
         

@@ -78,3 +78,9 @@ table td {
 	border-bottom: .1rem solid #bfbfbf;
     vertical-align: middle;
 }
+
+/*SEARCH STYLES*/
+
+.form-control {
+    margin-bottom: 1rem;
+}
