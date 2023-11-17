@@ -14,15 +14,36 @@ const PORT = envVariables.PORT || 65534;  // Adjust the PORT if needed (e.g., if
 const pug = require('pug');1
 app.set("view engine", "pug")
 
+
 // Adds helpful logs to console (Optional)
 const logger = require('morgan');
 app.use(logger('dev'));
+
 
 // Middleware setup
 app.use(express.static('public'));  // Serve static files from the 'public' directory
 app.use(express.json());             // Parse incoming JSON payloads
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
+// Setup Session
+const session = require('express-session');
+app.use(session({
+    secret: "Meow",
+    resave: false,
+    saveUninitialized: false
+}))
+
+// Flash Messages for User Auth.
+const flash = require("connect-flash");
+app.use(flash());
+
+// Setup Passport
+const passport = require('passport')
+const initializePassport = require('./routes/userAuth')
+initializePassport(passport);
+app.use(passport.initialize({}))
+app.use(passport.session({}))
 
 
 
