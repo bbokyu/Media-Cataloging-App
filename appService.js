@@ -149,5 +149,6 @@ module.exports = {
     insertDemotable, 
     updateNameDemotable, 
     countDemotable,
-    execute
+    execute,
+    withOracleDB
 };

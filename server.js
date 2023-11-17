@@ -11,14 +11,20 @@ const app = express();
 const PORT = envVariables.PORT || 65534;  // Adjust the PORT if needed (e.g., if you encounter a "port already occupied" error)
 
 // Enable pug
-const pug = require('pug');
+const pug = require('pug');1
 app.set("view engine", "pug")
+
+// Adds helpful logs to console (Optional)
+const logger = require('morgan');
+app.use(logger('dev'));
 
 // Middleware setup
 app.use(express.static('public'));  // Serve static files from the 'public' directory
 app.use(express.json());             // Parse incoming JSON payloads
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
+
 
 
 // If you prefer some other file as default page other than 'index.html',
@@ -38,6 +44,13 @@ const mediaApi = require('./api/media')
 
 app.use('/media', mediaRoutes);
 app.use('/api/media', mediaApi);
+
+// User Routes
+const userRoutes = require('./routes/UserController')
+
+app.use('/user', userRoutes);
+
+
 
 // ----------------------------------------------------------
 // Starting the server

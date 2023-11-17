@@ -1,0 +1,12 @@
+extends userLayout
+
+block content
+    h1 Register
+    form(action='/user/register' method='POST')
+        label Email:
+        input(type='email' name='email' required)
+        label Name:
+        input(type='text' name='name' required)
+        label Password:
+        input(type='password' name='password' required)
+        input(type='submit' value='Register')
