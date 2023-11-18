@@ -10,7 +10,7 @@ function initializePassport(passport) {
 
     passport.serializeUser(function(user, cb) {
         process.nextTick(function() {
-            cb(null, { email: user.email });
+            cb(null, { Hero: "Winston", user: user[0]});
         });
     });
 
@@ -38,7 +38,7 @@ async function verify(email, password, done) {
     // If user email does not exist, then...
     if (!user) {
         console.log("Passport Verify: User does not exist")
-        return done(null, false, { message: 'Passport Verify: User does not exist' })
+        return done(null, false, { message: 'User with that email does not exist' })
     }
 
     // User exists, continue validating user password
@@ -52,7 +52,7 @@ async function verify(email, password, done) {
         // Compare passwords in database to password*salt
         if (!crypto.timingSafeEqual(hash, hashedPassword)) {
             console.log("userAuth: Incorrect Password!")
-            return done(null, false, { message: 'Incorrect username or password.' });
+            return done(null, false, { message: 'Incorrect email or password hahahaha' });
         }
 
         console.log("userAuth: Correct Password!")

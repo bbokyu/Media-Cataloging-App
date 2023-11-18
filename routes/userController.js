@@ -5,20 +5,35 @@ const passport = require('passport')
 const crypto = require('crypto')
 
 
-
-// HTML VERSION Get Request for Login Page, returns Login HTML
-// router.get('/login', (req, res) => {
-//     res.redirect('/login.html')
-// })
+// Check if user is logged in
+function checkLogin(req, res, next) {
+    if (req.user) {
+        next();
+    } else {
+        req.flash("error", "Please log in before accessing your profile");
+        res.redirect('/user/login');
+    }
+}
 
 // PUG VERSION Get Request for Login Page, returns Login HTML
 router.get('/login', (req, res) => {
-    // console.log(req.session)
-    // console.log(req.flash('error'))
+    console.log(req.session)
+    console.log(req.user)
+    if (req.user) {
+        res.redirect('/user/profile')
+    }
 
-    res.render('user/login', { message: req.flash('error') });
+    res.render('user/login', { message: req.flash('error')});
 })
 
+// Render user profile page
+router.get('/profile', checkLogin, (req, res) => {
+    // Only logged in user can access beyond this point
+    console.log(req.user)
+    const user = req.user
+
+    res.render('user/profile', { user:user })
+})
 
 // POST request for logging in
 router.post('/login', passport.authenticate('local', {
@@ -26,6 +41,12 @@ router.post('/login', passport.authenticate('local', {
     failureRedirect: '/user/login',
     failureFlash: true
 }))
+
+
+// Get logout page
+router.get('/logout', function(req, res, next) {
+    res.render('user/logout')
+});
 
 // Request logout
 router.post('/logout', function(req, res, next) {
@@ -40,6 +61,11 @@ router.post('/logout', function(req, res, next) {
 
 // Get Request for Register Page, returns Register HTML
 router.get('/register', (req, res) => {
+    if (req.user) {
+        // req.flash("error", "Please log out before registering new user");
+        console.log("Must log out before registering new user!")
+        res.redirect('/user/profile');
+    }
     res.render('user/register')
 })
 
@@ -65,6 +91,7 @@ router.post('/register', async (req, res, next) => {
         return userService.registerUser(email, name, salt, hashedPassword)
             .then((registerResult) => {
                 if (registerResult) {
+                    req.flash("error", "Register Successful. Please log in.");
                     res.status(200).redirect('/user/login')
                 } else{
                     res.status(500).json({ error: "Unable to register user to database." });
@@ -77,10 +104,6 @@ router.post('/register', async (req, res, next) => {
 
 
 
-// Render user profile page
-router.get('/profile', (req, res) => {
-    console.log("THIS RUNS?")
-    res.render('user/profile')
-})
+
 
 module.exports = router;
