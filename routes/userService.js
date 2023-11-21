@@ -3,12 +3,13 @@ const db = require('../appService');
 
 // Add new user data to database
 async function registerUser(email, name, salt, hashed_password) {
-    console.log("Registering user with email: " + email + " name: " + name + " password: " + hashed_password);
+    console.log("Registering user with email: " + email + " name: " + name);
 
     return await db.withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO TheUsers ("email", "salt", "hash") VALUES (:email, :salt, :hashed_password)`,
-            [email, salt, hashed_password],
+            `INSERT INTO TheUsers ("email", "fName", "dateCreated", "salt", "hashed_password")
+             VALUES (:email, :name, current_date, :salt, :hashed_password)`,
+            [email, name, salt, hashed_password],
             { autoCommit: true }
         );
 

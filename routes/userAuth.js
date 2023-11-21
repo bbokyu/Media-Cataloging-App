@@ -42,18 +42,23 @@ async function verify(email, password, done) {
     }
 
     // User exists, continue validating user password
-    const salt = Buffer.from(user[1], 'hex');
-    const hash = Buffer.from(user[2], 'hex');
+    const salt = Buffer.from(user[3], 'hex');
+    const hash = Buffer.from(user[4], 'hex');
     crypto.pbkdf2(password, salt, 31000, 32, 'sha256', (error, hashedPassword) => {
         if (error) {
             return done(error)
         }
 
-        // Compare passwords in database to password*salt
-        if (!crypto.timingSafeEqual(hash, hashedPassword)) {
-            console.log("userAuth: Incorrect Password!")
-            return done(null, false, { message: 'Incorrect email or password hahahaha' });
+        try {
+            // Compare passwords in database to password*salt
+            if (!crypto.timingSafeEqual(hash, hashedPassword)) {
+                console.log("userAuth: Incorrect Password!")
+                return done(null, false, { message: 'Incorrect email or password hahahaha' });
+            }
+        } catch(error) {
+            return done(error)
         }
+
 
         console.log("userAuth: Correct Password!")
         return done(null, user)
