@@ -18,9 +18,9 @@ router.get("/", async(req, res) => {
 
 router.get("/browse", async (req, res) => {
     try {
-        const book_data = await db.execute("SELECT * FROM \"Book\" ORDER BY dbms_random.value FETCH FIRST 20 ROWS ONLY");
+        const book_data = await db.execute("SELECT * FROM \"BOOK\" ORDER BY dbms_random.value FETCH FIRST 20 ROWS ONLY");
         const film_data = await db.execute("SELECT * FROM \"Film\" ORDER BY dbms_random.value FETCH FIRST 20 ROWS ONLY");
-        // console.log(data);
+        //console.log(book_data);
         res.render(root + "browse", {root:root, books: book_data, films: film_data });
     } catch (error) {
         console.error("Error fetching data:", error)
@@ -39,7 +39,7 @@ router.get("/search", async (req, res) => {
 router.get("/book/:id", async (req, res) => {
     const id = req.params.id;
     try {
-        const book_data = await db.execute("SELECT * FROM \"Book\" WHERE \"id\" = " + id);
+        const book_data = await db.execute("SELECT * FROM BOOK WHERE \"id\" = " + id);
         res.render(root + "item", {root:root, book:book_data[0], type:Type.BOOK});
     } catch (Error) {
         res.status(404).json({ error: "Media not found." });

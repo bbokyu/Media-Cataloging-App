@@ -77,10 +77,11 @@ async function fetchDemotableFromDb() {
 }
 
 async function execute(query) {
-    return await withOracleDB(async (connection) => {
+    return await connect(async (connection) => {
         const result = await connection.execute(query);
         return result.rows;
     }).catch(() => {
+        console.error("There was an error with the query.")
         return [];
     });
 }

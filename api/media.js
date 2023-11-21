@@ -18,7 +18,7 @@ router.post("/search", async (req, res) => {
         let tableHtml = '<tbody id="search-results" class="">\n';
 
         // Books
-        const book_data = await db.execute("SELECT * FROM \"Book\" WHERE \"title\" LIKE \'\%" + req.body.search + "\%\'");
+        const book_data = await db.execute("SELECT * FROM BOOK WHERE \"title\" LIKE \'\%" + req.body.search + "\%\'");
 
         // Deal with book data
         for (let i = 0; i < book_data.length; i++) {
