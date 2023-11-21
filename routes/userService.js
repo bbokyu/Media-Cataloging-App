@@ -7,7 +7,7 @@ async function registerUser(email, name, salt, hashed_password) {
 
     return await db.withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO TheUsers ("email", "fName", "dateCreated", "salt", "hashed_password")
+            `INSERT INTO Users ("email", "fName", "dateCreated", "salt", "hashed_password")
              VALUES (:email, :name, current_date, :salt, :hashed_password)`,
             [email, name, salt, hashed_password],
             { autoCommit: true }
@@ -23,7 +23,7 @@ async function registerUser(email, name, salt, hashed_password) {
 async function grabUser(email) {
     return await db.withOracleDB(async (connection) => {
         const result = await connection.execute(
-            'SELECT * FROM TheUsers WHERE "email" = :email',
+            'SELECT * FROM Users WHERE "email" = :email',
             [email])
         return result.rows[0]
     }).catch((err) => {
