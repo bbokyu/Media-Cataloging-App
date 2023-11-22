@@ -1,4 +1,4 @@
-extends layout.pug
+extends ../layout.pug
 
 block content
     case type
@@ -12,3 +12,5 @@ block content
             h1= film[1]
             p #{film[2] + (film[5] ? (", " + film[5] + " minutes") : '')}
             p #{film[4]}
+
+    p Username: #{user ? user.user : ''}

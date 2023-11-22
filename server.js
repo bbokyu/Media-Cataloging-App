@@ -14,7 +14,6 @@ const PORT = envVariables.PORT || 65534;  // Adjust the PORT if needed (e.g., if
 const pug = require('pug');1
 app.set("view engine", "pug")
 
-
 // Adds helpful logs to console (Optional)
 const logger = require('morgan');
 app.use(logger('dev'));
@@ -45,7 +44,11 @@ initializePassport(passport);
 app.use(passport.initialize({}))
 app.use(passport.session({}))
 
-
+// This makes it so that the request object is available on every page
+app.use(function (req, res, next) {
+    res.locals.user = req.user;
+    next();
+});
 
 
 // If you prefer some other file as default page other than 'index.html',

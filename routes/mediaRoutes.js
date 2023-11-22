@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../appService');
+const app = express();
 
 const root = 'media/'
 
@@ -9,6 +10,7 @@ const Type = Object.freeze({
     FILM: 1,
     MUSIC: 2
 });
+
 
 // All these routes fall under views/media
 
@@ -21,7 +23,7 @@ router.get("/browse", async (req, res) => {
         const book_data = await db.execute("SELECT * FROM \"BOOK\" ORDER BY dbms_random.value FETCH FIRST 20 ROWS ONLY");
         const film_data = await db.execute("SELECT * FROM \"Film\" ORDER BY dbms_random.value FETCH FIRST 20 ROWS ONLY");
         //console.log(book_data);
-        res.render(root + "browse", {root:root, books: book_data, films: film_data });
+        res.render(root + "browse", {root:root, books: book_data, films: film_data});
     } catch (error) {
         console.error("Error fetching data:", error)
         res.status(500).json({ error: "An error occurred while fetching data." });
