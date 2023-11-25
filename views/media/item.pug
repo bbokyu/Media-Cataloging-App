@@ -13,4 +13,8 @@ block content
             p #{film[2] + (film[5] ? (", " + film[5] + " minutes") : '')}
             p #{film[4]}
 
-    p Username: #{user ? user.user : ''}
+        when 400
+            h1 Unknown
+            p The media could not be found.
+    
+    h2 Discussion

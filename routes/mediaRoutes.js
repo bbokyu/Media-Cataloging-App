@@ -8,7 +8,8 @@ const root = 'media/'
 const Type = Object.freeze({
     BOOK: 0,
     FILM: 1,
-    MUSIC: 2
+    MUSIC: 2,
+    NOT_FOUND: 400
 });
 
 
@@ -44,7 +45,8 @@ router.get("/book/:id", async (req, res) => {
         const book_data = await db.execute("SELECT * FROM BOOK WHERE \"id\" = " + id);
         res.render(root + "item", {root:root, book:book_data[0], type:Type.BOOK});
     } catch (Error) {
-        res.status(404).json({ error: "Media not found." });
+        res.render(root + "item", { root:root, type: Type.NOT_FOUND});
+        // res.status(404).json({ error: "Media not found."});
     }
 });
 

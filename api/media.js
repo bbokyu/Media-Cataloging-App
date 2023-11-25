@@ -58,6 +58,16 @@ router.post("/search", async (req, res) => {
     }
 });
 
+router.get("/comments", async (req, res) => {
+    try {
+        if (req.body.mediaids == '') {
+            return res.send('<div id="comments">No comments yet...</div>')
+        }
+    } catch (Error) {
+        return res.send('<div id="comments">There was a problem fetching comments.</div>')
+    }
+});
 
 module.exports = router;
 
+ 
