@@ -16,5 +16,16 @@ block content
         when 400
             h1 Unknown
             p The media could not be found.
-    
+            
+    p #{id}
+    p #{type}
+
+    - var requestvals = '{"mediaid":' + id + ', "mediatype":' + type + '}'
+
+    p= requestvals
+
     h2 Discussion
+        div.comment_wrapper
+            button(type="button" hx-trigger="click" hx-post="/api/media/comments" hx-target="#comments" hx-vals=requestvals hx-swap="outerHTML")
+                | Load Comments
+            div#comments
