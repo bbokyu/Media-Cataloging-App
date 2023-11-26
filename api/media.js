@@ -69,10 +69,6 @@ router.post("/comments", async (req, res) => {
         const media_id = req.body.mediaid;
         const media_type = req.body.mediatype;
 
-        console.log(req);
-
-        console.log("ID: " + media_id + ", Type: " + media_type);
-
         if (media_type == 0) {
             media_query = "SELECT \"id\" FROM \"Media\" WHERE \"book_id\" = " + media_id;
         } else if (media_type == Type.FILM) {
@@ -93,7 +89,7 @@ router.post("/comments", async (req, res) => {
         for (let i = 0; i < comment_data.length; i++) {
             let comment = comment_data[i];
             const datetime = comment[1];
-            const rating = [2];
+            const rating = 5 * Number(comment[2]);
             const author = comment[3];
             const text = comment[5];
 
@@ -101,24 +97,44 @@ router.post("/comments", async (req, res) => {
     <thead>
         <tr>
             <td>${author}</td>
-            <td>${datetime}</td>
+            <td align="right">${datetime}</td>
         </tr>
     </thead>
         <tr>
-            <td>${rating}</td>
-            <td>${text}</td>
+            <td>Rating: ${rating}</td>
+        </tr>
+        <tr>
+            <td colspan="2">${text}</td>
         </tr>
 `
         }
 
         table += "</table>"
 
-        console.log(table)
-
         return res.send(table)
     } catch (Error) {
         return res.send('<div id="comments">There was a problem fetching comments.</div>')
     }
+});
+
+
+router.post("/submit", async (req, res) => {
+    const comment = req.body;
+
+    const body = comment.comment;
+    const rating = 5 / Number(comment.rating);
+    const id = comment.media_id
+    
+    const insert = `INSERT INTO "Comment" ("rating", "author_id", "media_id", BODY) VALUES (${rating}, ${user.user}, ${id}, ${body})`
+
+    try {
+        db.execute(insert);
+    } catch (Error) {
+        return res.send("There was an error submitting your comment.")
+    }
+
+    console.log(req);
+
 });
 
 module.exports = router;

@@ -17,15 +17,48 @@ block content
             h1 Unknown
             p The media could not be found.
             
-    p #{id}
-    p #{type}
-
     - var requestvals = '{"mediaid":' + id + ', "mediatype":' + type + '}'
 
-    p= requestvals
+    mixin comment_form
+        form(
+            hx-swap="outerHTML" 
+            hx-target="this" 
+            hx-post="/api/media/submit"
+            )
+            input(
+              name="media_id"
+              value= id 
+              type="hidden"
+              )
+            .form-group
+            textarea(
+                name="comment"
+                placeholder="Write your thoughts here."
+                cols="60"
+                rows="8"
+                )
+            .form-group
+            input(
+              max="5" 
+              min="1" 
+              name="rating" 
+              type="range"
+              oninput="this.nextElementSibling.value = this.value"
+              )
+            output
+            br
+            input(
+            value="Submit" 
+            type="submit"
+            )
 
     h2 Discussion
-        div.comment_wrapper
-            button(type="button" hx-trigger="click" hx-post="/api/media/comments" hx-target="#comments" hx-vals=requestvals hx-swap="outerHTML")
-                | Load Comments
+        div
+        if user
+            +comment_form
+        else
+            p You have to be logged in to comment.
+            
+
+        div.comment_wrapper(hx-trigger="load" hx-post="/api/media/comments" hx-target="#comments" hx-vals=requestvals hx-swap="outerHTML")
             div#comments
