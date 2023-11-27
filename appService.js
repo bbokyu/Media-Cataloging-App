@@ -86,6 +86,17 @@ async function execute(query) {
     });
 }
 
+async function insert(query) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(query);
+        connection.commit();
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {
@@ -151,5 +162,6 @@ module.exports = {
     updateNameDemotable, 
     countDemotable,
     execute,
-    withOracleDB
+    withOracleDB,
+    insert
 };

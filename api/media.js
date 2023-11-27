@@ -89,7 +89,7 @@ router.post("/comments", async (req, res) => {
         for (let i = 0; i < comment_data.length; i++) {
             let comment = comment_data[i];
             const datetime = comment[1];
-            const rating = 5 * Number(comment[2]);
+            const rating = Number(comment[2]);
             const author = comment[3];
             const text = comment[5];
 
@@ -122,19 +122,25 @@ router.post("/submit", async (req, res) => {
     const comment = req.body;
 
     const body = comment.comment;
-    const rating = 5 / Number(comment.rating);
+    const rating = Number(comment.rating);
     const id = comment.media_id
+    const type = comment.media_type
+    const media_table = (type == 0 ? 'book_id' : 'film_id')
+
+    const mediaquery = `SELECT "id" FROM "Media" WHERE \"${media_table}\" = ${id}` 
     
-    const insert = `INSERT INTO "Comment" ("rating", "author_id", "media_id", BODY) VALUES (${rating}, ${user.user}, ${id}, ${body})`
+    const media_id = await db.execute(mediaquery)
+    
+    const insert = `INSERT INTO "Comment" ("rating", "author_id", "media_id", BODY) VALUES (${rating}, '${req.user.user}', ${media_id}, '${body}')`
 
+    console.log(insert)
     try {
-        db.execute(insert);
+        await db.insert(insert);
+
+        return res.send(`<div>Your comment was submitted sucessfully!</div>`)
     } catch (Error) {
-        return res.send("There was an error submitting your comment.")
+        return res.send("<div>There was an error submitting your comment.<div>")
     }
-
-    console.log(req);
-
 });
 
 module.exports = router;

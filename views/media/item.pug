@@ -30,6 +30,11 @@ block content
               value= id 
               type="hidden"
               )
+            input(
+                name="media_type"
+                value= type
+                type="hidden"
+            )
             .form-group
             textarea(
                 name="comment"
@@ -53,12 +58,13 @@ block content
             )
 
     h2 Discussion
-        div
-        if user
-            +comment_form
-        else
-            p You have to be logged in to comment.
-            
 
-        div.comment_wrapper(hx-trigger="load" hx-post="/api/media/comments" hx-target="#comments" hx-vals=requestvals hx-swap="outerHTML")
-            div#comments
+    div
+    if user
+        +comment_form
+    else
+        p You have to be logged in to comment.
+        
+
+    div.comment_wrapper(hx-trigger="load" hx-post="/api/media/comments" hx-target="#comments" hx-vals=requestvals hx-swap="outerHTML")
+        div#comments
