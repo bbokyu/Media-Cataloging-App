@@ -146,6 +146,62 @@ router.post("/submit", async (req, res) => {
     }
 });
 
+router.post("/add", async(req, res) => {
+
+    const id = req.body.mediaid;
+    const type = req.body.mediatype;
+    const media_table = (req.body.mediatype == 0 ? 'book_id' : 'film_id')
+
+    const mediaquery = `SELECT "id" FROM "Media" WHERE \"${media_table}\" = ${id}`
+
+    console.log(mediaquery);
+
+    const media_id = await db.execute(mediaquery);
+
+    const select = `SELECT * FROM "favourites" WHERE ("user_id" = '${req.user.user}' AND "media_id" = ${media_id})`
+
+    const insert = `INSERT INTO "favourites" ("user_id", "media_id") VALUES ('${req.user.user}', '${media_id}')`
+
+    console.log(insert);
+    try {
+        const exists = await db.execute(select);
+
+        if (exists.length > 0) {
+            return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/remove" hx-vals='{"mediaid": ${media_id}, "mediatype": ${type}}'>Remove from library</button>`);
+        }
+
+        await db.insert(insert);
+        return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/remove" hx-vals='{"mediaid": ${media_id}, "mediatype": ${type}}'>Remove from library</button>`)
+    } catch (Error) {
+        return res.send(`<div>Unable to add media to library. Try again later.</div>`)
+    }
+
+
+});
+
+router.post("/remove", async (req, res) => {
+    const id = req.body.mediaid;
+    const type = req.body.mediatype;
+    const media_table = (req.body.mediatype == 0 ? 'book_id' : 'film_id')
+
+    const mediaquery = `SELECT "id" FROM "Media" WHERE \"${media_table}\" = ${id}`
+
+    console.log(mediaquery);
+
+    const media_id = await db.execute(mediaquery);
+
+    const insert = `DELETE FROM "favourites" WHERE ("user_id" = '${req.user.user}' AND "media_id" = '${media_id}')`
+
+    console.log(insert);
+    try {
+        await db.insert(insert);
+        return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/remove" hx-vals='{"mediaid": ${media_id}, "mediatype": ${type}}'>Remove from library</button>`)
+    } catch (Error) {
+        return res.send(`<div>Unable to add media to library. Try again later.</div>`)
+    }
+    return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/add" hx-vals=requestvals>Add to library</button>`);
+});
+
 module.exports = router;
 
  

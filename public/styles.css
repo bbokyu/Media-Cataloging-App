@@ -47,6 +47,10 @@ header {
   }
 }
 
+.addlibrary {
+    max-width: 150px;
+}
+
 /*TABLE STYLES*/
 
 table {

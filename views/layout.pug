@@ -13,9 +13,9 @@ html(lang='en')
             .links
                 a(href='/media') Browse
                 a(href='/library') My Library
-                a(href='clubs') Clubs
+                a(href='/clubs') Clubs
                 a(href='/user/profile') Profile
-                a(href='search') Search
+                a(href='/media/search') Search
             .login 
                 a(href=(user ? '/user/logout' : '/user/login')) #{user ? "Logout" : "Login/Sign Up"}
         div.cwrapper
