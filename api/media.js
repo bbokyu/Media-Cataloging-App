@@ -84,7 +84,7 @@ router.post("/comments", async (req, res) => {
             return res.send('<div id="comments">There aren\'t any comments here, yet...<div>')
         }
 
-        let table = "<table id=comments>"
+        let table = "<div>"
 
         for (let i = 0; i < comment_data.length; i++) {
             let comment = comment_data[i];
@@ -94,6 +94,7 @@ router.post("/comments", async (req, res) => {
             const text = comment[5];
 
             table += `
+<table>
     <thead>
         <tr>
             <td>${author}</td>
@@ -106,10 +107,12 @@ router.post("/comments", async (req, res) => {
         <tr>
             <td colspan="2">${text}</td>
         </tr>
+</table>
+<br>
 `
         }
 
-        table += "</table>"
+        table += "</div>"
 
         return res.send(table)
     } catch (Error) {
