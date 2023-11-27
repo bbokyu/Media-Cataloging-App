@@ -167,11 +167,11 @@ router.post("/add", async(req, res) => {
         const exists = await db.execute(select);
 
         if (exists.length > 0) {
-            return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/remove" hx-vals='{"mediaid": ${media_id}, "mediatype": ${type}}'>Remove from library</button>`);
+            return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/remove" hx-vals='{"mediaid": ${id}, "mediatype": ${type}}'>Remove from library</button>`);
         }
 
         await db.insert(insert);
-        return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/remove" hx-vals='{"mediaid": ${media_id}, "mediatype": ${type}}'>Remove from library</button>`)
+        return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/remove" hx-vals='{"mediaid": ${id}, "mediatype": ${type}}'>Remove from library</button>`)
     } catch (Error) {
         return res.send(`<div>Unable to add media to library. Try again later.</div>`)
     }
@@ -195,7 +195,7 @@ router.post("/remove", async (req, res) => {
     console.log(insert);
     try {
         await db.insert(insert);
-        return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/remove" hx-vals='{"mediaid": ${media_id}, "mediatype": ${type}}'>Remove from library</button>`)
+        return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/add" hx-vals='{"mediaid": ${id}, "mediatype": ${type}}'>Add to library</button>`)
     } catch (Error) {
         return res.send(`<div>Unable to add media to library. Try again later.</div>`)
     }
