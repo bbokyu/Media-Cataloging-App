@@ -1,0 +1,14 @@
+extends ../layout.pug
+
+block content
+    h2(style="margin-bottom: 15px")= discussion_name
+
+    for reply in replies
+        table(style="margin-bottom: 10px")
+            thead
+                tr
+                    th= reply[3]
+                    th(align="right")= reply[1]
+            tbody
+                tr
+                    td= reply[4]

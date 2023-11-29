@@ -1,0 +1,17 @@
+extends ../layout.pug
+
+block content
+    h2 Clubs
+    a(href="/clubs/create")
+        button(style="max-width: 150px") Create a New club
+
+    for club in clubs
+        table(style="margin-top: 10px")
+            thead
+                tr
+                    th
+                        a(href="/clubs/" + club[0])= club[2]
+                    th(align="right")= club[1]
+            tbody
+                tr
+                    td= club[3]

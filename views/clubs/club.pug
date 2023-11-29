@@ -1,0 +1,18 @@
+extends ../layout.pug
+
+block content
+    h2= club[2]
+    p= club[6] + " members, " + club[4] + " comments in " + club[5] + " discussions."
+
+    h3 Discussions
+
+    for discussion in discussions
+        table(style="margin-bottom: 10px")
+            thead
+                tr
+                    th
+                        a(href="/clubs/" + club[0] + "/" + discussion[0])= discussion[4]
+                    th(align="right")= discussion[3]
+            tbody
+                tr
+                    td= "Posted " + discussion[1]

@@ -1,0 +1,37 @@
+extends ../layout.pug
+
+block content
+    h2 Create a new Club
+
+    mixin create_form
+        form(
+            hx-swap="outerHTML" 
+            hx-target="this" 
+            hx-post="/api/clubs/create"
+            )
+            label Title
+            br
+            input(
+                name="club_title"
+            )
+            .formgroup
+                label Description
+                br
+                textarea(
+                    name="club_description"
+                    placeholder="Write a description here."
+                    cols="50"
+                    rows="8"
+                    )
+            br
+            input(
+            value="Submit" 
+            type="submit"
+            )    
+
+    if (user)
+        +create_form
+    else
+        p You have to be logged in to create a club.
+        a(href="/user/login")
+            button Login
