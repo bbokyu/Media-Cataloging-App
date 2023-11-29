@@ -71,8 +71,11 @@ app.use('/api/media', mediaApi);
 
 // User Routes
 const userRoutes = require('./routes/UserController')
-
 app.use('/user', userRoutes);
+
+// Club Routes
+const clubRoutes = require('./routes/clubRoutes')
+app.use('/clubs', clubRoutes);
 
 
 
