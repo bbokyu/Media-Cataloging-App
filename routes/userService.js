@@ -33,7 +33,24 @@ async function grabUser(email) {
     });
 }
 
+// Grab list of favourite media
+async function grabFavourites(user) {
+    try {
+        const book_data = await db.execute("SELECT * FROM \"BOOK\" ORDER BY dbms_random.value FETCH FIRST 5 ROWS ONLY");
+        return book_data
+    } catch (error) {
+        console.error("Error fetching data:", error)
+    }
+
+}
+
+
+// const selectFav = `SELECT * FROM "favourites" WHERE ("user_id" = '${req.user.user}')`
+// const favourites = await db.execute(selectFav);
+// console.log(favourites)
+
 module.exports = {
     grabUser,
-    registerUser
+    registerUser,
+    grabFavourites
 };
