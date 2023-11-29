@@ -3,6 +3,7 @@ const router = express.Router();
 const userService = require("../routes/userService");
 const passport = require('passport')
 const crypto = require('crypto')
+const db = require("../appService");
 
 
 // Check if user is logged in
@@ -10,15 +11,18 @@ function checkLogin(req, res, next) {
     if (req.user) {
         next();
     } else {
-        req.flash("error", "Please log in before accessing your profile");
+
+        const destination = req.path.split("/")
+        const errorMessage = "Please log in before accessing your " + destination[1] + "."
+        req.flash("error", errorMessage);
         res.redirect('/user/login');
     }
 }
 
 // PUG VERSION Get Request for Login Page, returns Login HTML
 router.get('/login', (req, res) => {
-    console.log(req.session)
-    console.log(req.user)
+    // console.log(req.session)
+    // console.log(req.user)
     if (req.user) {
         res.redirect('/user/profile')
     }
@@ -102,6 +106,16 @@ router.post('/register', async (req, res, next) => {
     });
 });
 
+router.get('/library', checkLogin, async (req, res) => {
+    const user = req.user
+    return userService.grabFavourites(req.user.user)
+        .then((fav_book_data) => {
+            res.render('user/library', {books: fav_book_data});
+        })
+        .catch((error) => {
+            res.render('user/library', { message: "Unable to grab Library!"});
+        })
+})
 
 
 

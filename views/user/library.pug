@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+    nav(class="flex nav")
+        h1(class="h1 mb-0") My Library
+        table(class="table table-striped")
+            thead
+                tr
+                    th(class="table-secondary") Title
+                    th(class="table-secondary") Date
+            tbody(id="books" hx-target="closest tr" hx-swap="outerHTML")
+                each book in books
+                    tr
+                        td
+                            a(href=`/media/book/` + book[0]) #{book[1]}
+                        td= book[2]
+
+
+
+    if message != null
+        p #{message}
