@@ -75,7 +75,10 @@ app.use('/user', userRoutes);
 
 // Club Routes
 const clubRoutes = require('./routes/clubRoutes')
+const clubApi = require('./api/clubs')
 app.use('/clubs', clubRoutes);
+app.use('/api/clubs', clubApi)
+
 
 
 
