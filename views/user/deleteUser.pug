@@ -1,0 +1,33 @@
+extends ../layout.pug
+
+
+block content
+    nav(class="flex nav")
+        h1(class="h1 mb-0") Please confirm your account deletion
+        button(id='deleteUserBtn' value='Confirm') Confirm
+
+
+    script.
+        document.getElementById('deleteUserBtn').addEventListener('click', function () {
+
+            // Perform the HTTP DELETE request
+            fetch('/user/deleteUser', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(response => {
+                    // if (!response.ok) {
+                    //     throw new Error('Network response was not ok');
+                    // }
+                    // alert('Account Deleted!')
+                    // response.redirect('/user/login')
+                    if (response.ok) {
+                        alert("Account Deletion Successful!")
+                    }
+                })
+        });
+
+
+
+

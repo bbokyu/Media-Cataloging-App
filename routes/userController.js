@@ -13,7 +13,7 @@ function checkLogin(req, res, next) {
     } else {
 
         const destination = req.path.split("/")
-        const errorMessage = "Please log in before accessing your " + destination[1] + "."
+        const errorMessage = "Please log in before accessing " + destination[1] + "."
         req.flash("error", errorMessage);
         res.redirect('/user/login');
     }
@@ -32,7 +32,7 @@ router.get('/login', (req, res) => {
 
 // Render user profile page
 router.get('/profile', checkLogin, (req, res) => {
-    // Only logged in user can access beyond this point
+    // Only online user can access beyond this point
     console.log(req.user)
     const user = req.user
 
@@ -46,6 +46,57 @@ router.post('/login', passport.authenticate('local', {
     failureFlash: true
 }))
 
+// Render Update User Page
+router.get('/updateUser', checkLogin, (req, res) => {
+    res.render('user/updateUser')
+})
+
+// POST request to update user email
+router.post('/updateUser', checkLogin, (req, res) => {
+    const { email, confirmEmail } = req.body
+
+    if (email !== confirmEmail) {
+        res.render('user/updateEmail', {message: "Emails did not match!"})
+    } else if (email === req.user.user) {
+        res.render('user/updateEmail', {message: "Cannot Change to Previous Email!"})
+    } else {
+        return userService.changeEmail(req.user.user)
+            .then((changeEmailResult) => {
+                if (changeEmailResult) {
+                    res.redirect('user/profile')
+                } else {
+                    res.send("Failed to change Email!")
+                }
+            })
+    }
+})
+
+
+router.get('/deleteUser', checkLogin, (req, res) => {
+
+    res.render('user/deleteUser')
+
+})
+
+// Delete User
+router.delete('/deleteUser', checkLogin, (req, res, next) => {
+    const user = req.user.user
+    console.log("Delete user: " + user);
+
+    return userService.deleteUser(user)
+        .then((deleteResult) => {
+            if (deleteResult) {
+                res.sendStatus(200);
+            } else {
+                console.log("coffee");
+            }
+        })
+        .catch((error) => {
+            res.status(500).json({ error: "Unable to delete user." });
+        })
+
+
+})
 
 // Get logout page
 router.get('/logout', function(req, res, next) {
@@ -55,7 +106,9 @@ router.get('/logout', function(req, res, next) {
 // Request logout
 router.post('/logout', function(req, res, next) {
     req.logout(function(err) {
-        if (err) { return next(err); }
+        if (err) {
+            return next(err);
+        }
         res.redirect('/user/login');
     });
 });
@@ -77,7 +130,7 @@ router.get('/register', (req, res) => {
 // Redirects to Login page if successful
 router.post('/register', async (req, res, next) => {
     console.log("UserController: Registering new user!");
-    const {email, name, password} = req.body;
+    const {email, name, password, postalCode, city, province} = req.body;
 
     // If any of the user data is null, send code 400
     if (email == null || name == null || password == null) {
@@ -92,7 +145,7 @@ router.post('/register', async (req, res, next) => {
             return next(error)
         }
 
-        return userService.registerUser(email, name, salt, hashedPassword)
+        return userService.registerUser(email, name, salt, hashedPassword, postalCode, city, province)
             .then((registerResult) => {
                 if (registerResult) {
                     req.flash("error", "Register Successful. Please log in.");
@@ -117,7 +170,16 @@ router.get('/library', checkLogin, async (req, res) => {
         })
 })
 
-
+router.get('/library', checkLogin, async (req, res) => {
+    const user = req.user
+    return userService.grabFavourites(req.user.user)
+        .then((fav_book_data) => {
+            res.render('user/library', {books: fav_book_data});
+        })
+        .catch((error) => {
+            res.render('user/library', { message: "Unable to grab Library!"});
+        })
+})
 
 
 module.exports = router;
