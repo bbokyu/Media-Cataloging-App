@@ -3,7 +3,18 @@ extends ../layout.pug
 block content
     nav(class="flex nav")
         h1(class="h1 mb-0") Search
-    input.form-control(type="text" name="search" placeholder='Begin Typing To Search Media...' hx-post='/api/media/search' hx-trigger='input changed delay:500ms, search' hx-target='#search-results', hx-swap="outerHTML")
+
+    input.form-control(type="text" name="search" 
+                        placeholder='Begin Typing To Search Media...' 
+                        hx-post='/api/media/search' 
+                        hx-trigger='input changed delay:500ms, search, change delay:500ms from:#date_filter' 
+                        hx-target='#search-results' 
+                        hx-swap="outerHTML"
+                        hx-include="[name='date_filter']")
+
+    .filter(style="display:flex; align-items: center;")
+        p(style="margin-right: 10px;") Filter by date 
+        input(type="text" id="date_filter" name="date_filter" style="max-width: 150px; max-height: 20px;" placeholder="e.g. 1985")
 
     table
           thead

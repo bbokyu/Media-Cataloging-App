@@ -16,7 +16,19 @@ const Type = Object.freeze({
 
 router.post("/search", async (req, res) => {
     try {
-        
+
+        let date = null;
+
+        try {
+            if (Number(req.body.date_filter) > 1850 < 2030) {
+                date = Number(req.body.date_filter);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+        console.log(date);
+
         // Only search if query is longer than 3 chars
         if (req.body.search.length < 3) {
             return res.send('<div id="search-results">Search for more than three characters.</div>');
@@ -26,7 +38,16 @@ router.post("/search", async (req, res) => {
         let tableHtml = '<tbody id="search-results" class="">\n';
 
         // Books
-        const book_data = await db.execute("SELECT * FROM BOOK WHERE \"title\" LIKE \'\%" + req.body.search + "\%\'");
+        let query = null;
+        if (date) {
+            query = "SELECT * FROM BOOK WHERE \"title\" LIKE \'\%" + req.body.search + `\%\' AND "date" > ${date}`
+        } else {
+            query = "SELECT * FROM BOOK WHERE \"title\" LIKE \'\%" + req.body.search + "\%\'"
+        }
+
+        console.log(query);
+
+        const book_data = await db.execute(query);
 
         // Deal with book data
         for (let i = 0; i < book_data.length; i++) {
@@ -39,7 +60,12 @@ router.post("/search", async (req, res) => {
 
 
         // Films
-        const film_data = await db.execute("SELECT * FROM \"Film\" WHERE \"title\" LIKE \'\%" + req.body.search + "\%\'");
+        if (date) {
+            query = "SELECT * FROM \"Film\" WHERE \"title\" LIKE \'\%" + req.body.search + `\%\' AND "date" > ${date}`
+        } else {
+            query = "SELECT * FROM \"Film\" WHERE \"title\" LIKE \'\%" + req.body.search + "\%\'"
+        }
+        const film_data = await db.execute(query);
 
         // Deal with film data
         for (let i = 0; i < film_data.length; i++) {
