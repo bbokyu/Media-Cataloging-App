@@ -85,6 +85,30 @@ router.post("/search", async (req, res) => {
             tableHtml += `</tr>`;
         }
 
+
+        // FILM
+        if (date) {
+            query = `SELECT ${projection} FROM "Film" WHERE "title" LIKE '%${req.body.search}%' AND "date" > ${date}`
+        } else {
+            query = `SELECT ${projection} FROM "Film" WHERE "title" LIKE '%${req.body.search}%'`
+        }
+        const film_data = await db.execute(query);
+
+        // Deal with film data
+        for (let i = 0; i < film_data.length; i++) {
+            tableHtml += `<tr>
+                    <td>Film</td>`
+
+            tableHtml += `<td><a href='/media/book/${film_data[i][0]}'>${film_data[i][0]}</a></td>`
+
+            for (let j = 1; j < projection_array.length; j++) {
+                tableHtml += `<td>${film_data[i][j]}</td>`
+            }
+
+            tableHtml += `</tr>`;
+        }
+
+        // End table
         tableHtml += `</tbody>\n</table>`;
 
 
