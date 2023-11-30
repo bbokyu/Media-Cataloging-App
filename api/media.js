@@ -27,60 +27,66 @@ router.post("/search", async (req, res) => {
             console.log(e);
         }
 
-        console.log(date);
-
         // Only search if query is longer than 3 chars
         if (req.body.search.length < 3) {
             return res.send('<div id="search-results">Search for more than three characters.</div>');
         }
 
+
+        // Setup Projection attributes
+        let projection_array = [`"id"`];
+
+        if (req.body.title_include) {
+            projection_array.push(`"title"`);
+        } 
+
+        if (req.body.date_include) {
+            projection_array.push(`"date"`);
+        }
+        
+        const projection = projection_array.toString();
+
+        console.log(projection);
+
         // Set up table
-        let tableHtml = '<tbody id="search-results" class="">\n';
+        let tableHtml = `<table id="search-results" class="">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>ID</th>`;
+
+        for (let i = 1; i <  projection_array.length; i++) {
+            tableHtml += `<th>${projection_array[i].slice(1, -1)}</th>`
+        }
+
+        tableHtml += `</tr>\n</thead>\n<tbody>`;
 
         // Books
         let query = null;
         if (date) {
-            query = "SELECT * FROM BOOK WHERE \"title\" LIKE \'\%" + req.body.search + `\%\' AND "date" > ${date}`
+            query = `SELECT ${projection} FROM BOOK WHERE "title" LIKE '%${req.body.search}%' AND "date" > ${date}`
         } else {
-            query = "SELECT * FROM BOOK WHERE \"title\" LIKE \'\%" + req.body.search + "\%\'"
+            query = `SELECT ${projection} FROM BOOK WHERE "title" LIKE '%${req.body.search}%'`
         }
-
-        console.log(query);
 
         const book_data = await db.execute(query);
 
         // Deal with book data
         for (let i = 0; i < book_data.length; i++) {
-            const id = book_data[i][0]
-            const title = book_data[i][1]
-            const date = book_data[i][2]
+            tableHtml += `<tr>
+                    <td>Book</td>`
 
-            tableHtml += `<tr><td>Book</td><td><a href='/media/book/${id}'>${title}</a></td><td>${date}</td></tr>\n`;
+            tableHtml += `<td><a href='/media/book/${book_data[i][0]}'>${book_data[i][0]}</a></td>`
+
+            for (let j = 1; j < projection_array.length; j++) {
+                tableHtml += `<td>${book_data[i][j]}</td>`
+            }
+
+            tableHtml += `</tr>`;
         }
 
+        tableHtml += `</tbody>\n</table>`;
 
-        // Films
-        if (date) {
-            query = "SELECT * FROM \"Film\" WHERE \"title\" LIKE \'\%" + req.body.search + `\%\' AND "date" > ${date}`
-        } else {
-            query = "SELECT * FROM \"Film\" WHERE \"title\" LIKE \'\%" + req.body.search + "\%\'"
-        }
-        const film_data = await db.execute(query);
-
-        // Deal with film data
-        for (let i = 0; i < film_data.length; i++) {
-            const id = film_data[i][0]
-            const title = film_data[i][1]
-            const date = film_data[i][2]
-
-            tableHtml += `<tr><td>Film</td><td><a href='/media/film/${id}'>${title}</a></td><td>${date}</td></tr>\n`;
-        }
-
-        // Music
-        // TODO
-
-        // End table
-        tableHtml += '</tbody>';
 
         // Send results
         return res.send(tableHtml);
