@@ -3,6 +3,12 @@ extends ../layout
 block content
     nav(class="flex nav")
         h1(class="h1 mb-0") My Library
+
+        form(action='/user/library' method='GET')
+            label Filter by Date:
+            input(type="number" id="date_filter" name="date_filter" style="max-width: 150px; max-height: 20px;" placeholder="e.g. 1985")
+            input(type='submit' value='Filter')
+
         h2(clas="h2 mb-0") Books
         table(class="table table-striped")
             thead
@@ -23,7 +29,7 @@ block content
                     th(class="table-secondary") Date
                     th(class="table-secondary") Genres
                     th(class="table-secondary") Duration
-            tbody(id="books" hx-target="closest tr" hx-swap="outerHTML")
+            tbody(id="films" hx-target="closest tr" hx-swap="outerHTML")
                 each film in films
                     tr
                         td
@@ -33,5 +39,4 @@ block content
                         td= film[5]
 
 
-    if message != null
-        p #{message}
+
