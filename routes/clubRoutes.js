@@ -25,6 +25,10 @@ router.get("/create", async (req, res) => {
     return res.render(root + "create", { root:root });
 });
 
+router.get("/dcreate/:id", async (req, res) => {
+    return res.render(root + "dcreate", { root:root, club_id: req.params.id});
+});
+
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
 

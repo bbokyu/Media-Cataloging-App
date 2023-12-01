@@ -1,0 +1,32 @@
+extends ../layout.pug
+
+block content
+    h2 Create a new Discussion
+
+    mixin create_form
+        form(
+            hx-swap="outerHTML" 
+            hx-target="this" 
+            hx-post="/api/clubs/dcreate"
+            )
+            input(
+                name="club_id"
+                type="hidden"
+                value= club_id
+            )
+            label Title
+            br
+            input(
+                name="discussion_title"
+            )
+            input(
+            value="Submit" 
+            type="submit"
+            )    
+
+    if (user)
+        +create_form
+    else
+        p You have to be logged in to create a new discussion.
+        a(href="/user/login")
+            button Login

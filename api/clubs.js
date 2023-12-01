@@ -31,6 +31,28 @@ router.post("/create", async (req, res) => {
     }
 });
 
+router.post("/dcreate", async (req, res) => {
+    const title = req.body.discussion_title;
+    const clubid = req.body.club_id;
+    const userid = req.user.user;
+
+    console.log("Title:", title, "clubid:", clubid, "userid", userid);
+    
+    try {
+        const query = `INSERT INTO "Discussion" ("club_id", "author_id", "content") VALUES (${clubid}, '${userid}', '${title}')`
+        console.log(query);
+        await db.insert(query);
+
+        const club_update = `UPDATE "Club" c SET c.DISCUSSION_COUNT = c.DISCUSSION_COUNT + 1 WHERE c."id" = ${clubid}`
+        await db.insert(club_update);
+
+        return res.send(`<div> Your discussion has been created! You can find it on the <a href="/clubs/${clubid}">discussion page</a></div>`)
+    } catch (Error) {
+        return res.send(Error);
+    }
+});
+
+
 router.post("/load", async (req, res) => {
 
     let query = `SELECT * FROM "Club"`;
