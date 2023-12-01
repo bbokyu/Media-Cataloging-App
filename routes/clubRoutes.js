@@ -18,6 +18,8 @@ router.get("/", async (req, res) => {
 
     const popular = await db.execute(`SELECT COUNT(*) as club_count FROM "Club" WHERE member_count > (SELECT AVG(member_count) FROM "Club") GROUP BY member_count`);
 
+    console.log(popular);
+
     return res.render(root + "index", { root:root, clubs:club_data, popular:popular, supermember:supermember }); 
 });
 

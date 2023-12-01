@@ -6,9 +6,10 @@ block content
         button(style="max-width: 150px") Create a New club
 
     if supermember > 0
-        p= `There are currently ${popular} popular clubs and ${supermember} super members!`
+        p= `There are currently ${(popular != '' ? popular : 'no')} popular clubs and ${supermember} super members!`
     else 
-        p= `There are currently ${popular} popular clubs!` 
+        p= `There are currently ${(popular != '' ? popular : 'no')} popular clubs!` 
+
     for club in clubs
             table(style="margin-top: 10px")
                 thead
