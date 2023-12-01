@@ -31,11 +31,10 @@ router.get('/login', (req, res) => {
 })
 
 // Render user profile page
-router.get('/profile', checkLogin, (req, res) => {
+router.get('/profile', (req, res) => {
     // Only online user can access beyond this point
-    console.log(req.user)
-    const user = req.user
-
+    // console.log(req.user)
+    const user = 'seanlin5@gmail.com'
     res.render('user/profile', { user:user })
 })
 
@@ -47,7 +46,7 @@ router.post('/login', passport.authenticate('local', {
 }))
 
 // Render Update User Page
-router.get('/updateUser', checkLogin, (req, res) => {
+router.get('/updateUser', (req, res) => {
     res.render('user/updateUser')
 })
 
@@ -72,7 +71,7 @@ router.post('/updateUser', checkLogin, (req, res) => {
 })
 
 
-router.get('/deleteUser', checkLogin, (req, res) => {
+router.get('/deleteUser', (req, res) => {
 
     res.render('user/deleteUser')
 
