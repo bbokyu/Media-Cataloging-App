@@ -31,12 +31,8 @@ router.get("/:id", async (req, res) => {
     if (isNaN(Number(id)))
         return res.render("notfound")
 
-    const club_data = await db.execute(`SELECT * FROM "Club" WHERE "id" = ${id}`);
+    const club_data = await db.execute(`SELECT "id", "date", "name", "description", COMMENT_COUNT, DISCUSSION_COUNT, MEMBER_COUNT FROM "Club" WHERE "id" = ${id}`);
     const discussion_data = await db.execute(`SELECT * FROM "Discussion" d WHERE d."club_id" = ${id} ORDER BY d."date" DESC`)
-
-    console.log(discussion_data);
-
-
 
     return res.render(root + "club", { root:root, club:club_data[0], discussions:discussion_data })
 });

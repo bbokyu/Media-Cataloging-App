@@ -64,5 +64,9 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
+router.get('/', async(req, res) => {
+    return res.redirect(301, '/media/browse');
+});
+
 
 module.exports = router;

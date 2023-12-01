@@ -6,7 +6,7 @@ block content
         input.form-control(type="text" name="search"
                             placeholder='Begin Typing To Search Media...'
                             hx-post='/api/media/search'
-                            hx-trigger='load, input changed delay:500ms, search, change delay:100ms from:#date_filter, change from:#title_include, change from:#date_include'
+                            hx-trigger='load, input changed delay:500ms, search, change from:#date_filter, change from:#title_include, change from:#date_include'
                             hx-target='#search-results'
                             hx-swap="outerHTML"
                             hx-include="[name='date_filter'], [name='title_include'], [name='date_include']")
