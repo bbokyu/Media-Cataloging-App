@@ -72,9 +72,7 @@ router.post('/updateUser', checkLogin, (req, res) => {
 
 
 router.get('/deleteUser', (req, res) => {
-
     res.render('user/deleteUser')
-
 })
 
 // Delete User
@@ -85,7 +83,7 @@ router.delete('/deleteUser', checkLogin, (req, res, next) => {
     return userService.deleteUser(user)
         .then((deleteResult) => {
             if (deleteResult) {
-                res.sendStatus(200);
+                res.redirect(303,'/user/logout')
             } else {
                 console.log("coffee");
             }
