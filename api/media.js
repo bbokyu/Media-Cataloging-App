@@ -202,6 +202,33 @@ router.post("/submit", async (req, res) => {
     }
 });
 
+router.post("/libstatus", async (req, res) => {
+    const id = req.body.mediaid;
+    const type = req.body.mediatype;
+    const media_table = (req.body.mediatype == 0 ? 'book_id' : 'film_id')
+
+    console.log("id:", id, "type:", type, "media_table:", media_table)
+
+    if (typeof req.user == 'undefined') {
+        return res.send(`<a href=/user/login> <button> Login to add to library</button></a>`)
+    }
+
+
+    const mediaquery = `SELECT "id" FROM "Media" WHERE "${media_table}" = ${id}`
+
+    const media_id = await db.execute(mediaquery);
+
+    const select = `SELECT * FROM "favourites" WHERE ("user_id" = '${req.user.user}' AND "media_id" = ${media_id})`
+
+    const exists = await db.execute(select);
+
+    if (exists.length > 0) {
+        return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/remove" hx-vals='{"mediaid": ${id}, "mediatype": ${type}}'>Remove from library</button>`)
+    } else {
+        return res.send(`<button class="addlibrary" hx-swap="outerHTML" hx-target="this" hx-trigger="click" hx-post="/api/media/add" hx-vals='{"mediaid": ${id}, "mediatype": ${type}}'>Add to library</button>`)
+    }
+});
+
 router.post("/add", async(req, res) => {
 
     const id = req.body.mediaid;

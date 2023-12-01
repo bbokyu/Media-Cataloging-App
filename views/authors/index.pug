@@ -1,0 +1,18 @@
+extends ../layout.pug
+
+block content
+    h2 Authors
+
+    table
+        thead
+            tr
+                th ID
+                th Name
+                th Books Written
+        tbody
+            each author in authors
+                tr
+                    td= author[0]
+                    td
+                        a(href="/authors/" + author[0])= author[1]
+                    td= author[2]
