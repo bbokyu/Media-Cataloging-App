@@ -19,7 +19,7 @@ html(lang='en')
                 a(href='/clubs') Clubs
                 a(href='/user/library') My Library
                 a(href='/user/profile') My Profile
-            .login
+            .login.links
                 a(href=(user ? '/user/logout' : '/user/login')) #{user ? "Logout" : "Login/Sign Up"}
         div.cwrapper
             block content 
