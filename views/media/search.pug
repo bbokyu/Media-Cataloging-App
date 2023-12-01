@@ -1,32 +1,31 @@
 extends ../layout.pug
 
 block content
-    nav(class="flex nav")
-        h1(class="h1 mb-0") Search
+    div.search-page
 
-    input.form-control(type="text" name="search" 
-                        placeholder='Begin Typing To Search Media...' 
-                        hx-post='/api/media/search' 
-                        hx-trigger='load, input changed delay:500ms, search, change delay:100ms from:#date_filter, change from:#title_include, change from:#date_include' 
-                        hx-target='#search-results' 
-                        hx-swap="outerHTML"
-                        hx-include="[name='date_filter'], [name='title_include'], [name='date_include']")
+        input.form-control(type="text" name="search"
+                            placeholder='Begin Typing To Search Media...'
+                            hx-post='/api/media/search'
+                            hx-trigger='load, input changed delay:500ms, search, change delay:100ms from:#date_filter, change from:#title_include, change from:#date_include'
+                            hx-target='#search-results'
+                            hx-swap="outerHTML"
+                            hx-include="[name='date_filter'], [name='title_include'], [name='date_include']")
+        i.bx.bx-search
+        .filter(style="display:flex; align-items: center;")
+            p(style="margin-right: 10px;") Filter by date
+            input(type="text" id="date_filter" name="date_filter" style="max-width: 150px; max-height: 20px;" placeholder="e.g. 1985")
 
-    .filter(style="display:flex; align-items: center;")
-        p(style="margin-right: 10px;") Filter by date 
-        input(type="text" id="date_filter" name="date_filter" style="max-width: 150px; max-height: 20px;" placeholder="e.g. 1985")
+        .filter(style="display:flex; align-items: center;")
+            p(style="margin-right: 10px;") Choose Items:
+            input(type="checkbox" id="title_include" name="title_include" checked=true)
+            label(for="title_include") Title
+            input(type="checkbox" id="date_include" name='date_include' checked=true)
+            label(for="date_include") Date
 
-    .filter(style="display:flex; align-items: center;")
-        p(style="margin-right: 10px;") Choose Items: 
-        input(type="checkbox" id="title_include" name="title_include" checked=true)
-        label(for="title_include") Title
-        input(type="checkbox" id="date_include" name='date_include' checked=true)
-        label(for="date_include") Date
-
-    table(id="search-results")
-          thead
-                tr
-                    th Type
-                    th ID
-                    th Title
-                    th Date
+        table(id="search-results")
+              thead
+                    tr
+                        th Type
+                        th ID
+                        th Title
+                        th Date

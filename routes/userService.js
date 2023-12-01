@@ -51,29 +51,55 @@ async function grabUser(email) {
 }
 
 // Grab list of favourite media
-async function grabFavourites(user) {
-    try {
-        const book_data = await db.execute("SELECT * FROM \"BOOK\" ORDER BY dbms_random.value FETCH FIRST 5 ROWS ONLY");
-        return book_data
-    } catch (error) {
-        console.error("Error fetching data:", error)
-    }
+async function grabFavouriteBooks(user) {
+    return await db.withOracleDB(async (connection) => {
+        const fav_book_query = `select * from BOOK where BOOK."id" in (select m."book_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id")`
+        const book_data = await connection.execute(fav_book_query)
+        return book_data.rows
+    }).catch((err) => {
+        console.log("Error grabbing favourite books!");
+        console.log(err);
+        return [];
+    });
+}
 
+
+async function grabFavouriteFilms(user) {
+    return await db.withOracleDB(async (connection) => {
+        const fav_film_query = `select * from "Film" where "Film"."id" in (select m."film_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id")`
+        const film_data = await connection.execute(fav_film_query)
+        return film_data.rows
+    }).catch((err) => {
+        console.log("Error grabbing favourite books!");
+        console.log(err);
+        return [];
+    });
 }
 // const selectFav = `SELECT * FROM "favourites" WHERE ("user_id" = '${req.user.user}')`
 // const favourites = await db.execute(selectFav);
 // console.log(favourites)
 
-async function updateUser(user) {
-    return await db.withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM Users WHERE "email" = :email', [email])
-        return true
-    }).catch((error) => {
-        console.log("Error change User Information!");
-        console.log(error);
-        return false;
-    });
-}
+// async function updateUserName(user) {
+//     return await db.withOracleDB(async (connection) => {
+//         const result = await connection.execute('SELECT * FROM Users WHERE "email" = :email', [email])
+//         return true
+//     }).catch((error) => {
+//         console.log("Error change User Information!");
+//         console.log(error);
+//         return false;
+//     });
+// }
+
+// async function updateUserPassword(user) {
+//     return await db.withOracleDB(async (connection) => {
+//         const result = await connection.execute('SELECT * FROM Users WHERE "email" = :email', [email])
+//         return true
+//     }).catch((error) => {
+//         console.log("Error change User Information!");
+//         console.log(error);
+//         return false;
+//     });
+// }
 
 // Delete User from Database and all its children relations
 async function deleteUser(user) {
@@ -95,7 +121,7 @@ async function deleteUser(user) {
 module.exports = {
     grabUser,
     registerUser,
-    grabFavourites,
-    updateUser,
+    grabFavouriteBooks,
+    grabFavouriteFilms,
     deleteUser
 };
