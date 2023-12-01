@@ -3,16 +3,22 @@ extends ../layout.pug
 block content
     h2 Authors
 
+    .filter(style="display:flex; align-items: center;")
+        p(style="margin-right: 10px;") Filter by books written
+        input(type="number" 
+                id="bw_filter" 
+                name="bw_filter" 
+                style="max-width: 150px; max-height: 20px;" min="0" 
+                placeholder="e.g. 3"
+                hx-post='/api/authors/search'
+                hx-trigger='load, input changed delay:100ms'
+                hx-target='#author_table'
+                hx-swap="outerHTML")
+
     table
         thead
             tr
                 th ID
                 th Name
                 th Books Written
-        tbody
-            each author in authors
-                tr
-                    td= author[0]
-                    td
-                        a(href="/authors/" + author[0])= author[1]
-                    td= author[2]
+        tbody#author_table
