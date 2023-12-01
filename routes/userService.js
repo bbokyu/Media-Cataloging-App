@@ -79,16 +79,19 @@ async function grabFavouriteFilms(user, date_filter) {
 // const favourites = await db.execute(selectFav);
 // console.log(favourites)
 
-// async function updateUserName(user) {
-//     return await db.withOracleDB(async (connection) => {
-//         const result = await connection.execute('SELECT * FROM Users WHERE "email" = :email', [email])
-//         return true
-//     }).catch((error) => {
-//         console.log("Error change User Information!");
-//         console.log(error);
-//         return false;
-//     });
-// }
+async function changeUserName(user, newName) {
+    return await db.withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `UPDATE USERS SET "fName" = '${newName}' where "email" = '${user}'`,
+            [],
+            { autoCommit: true })
+        return result.rowsAffected > 0
+    }).catch((error) => {
+        console.log("Error change User name!");
+        console.log(error);
+        return false;
+    });
+}
 
 // async function updateUserPassword(user) {
 //     return await db.withOracleDB(async (connection) => {
@@ -123,5 +126,6 @@ module.exports = {
     registerUser,
     grabFavouriteBooks,
     grabFavouriteFilms,
-    deleteUser
+    deleteUser,
+    changeUserName
 };

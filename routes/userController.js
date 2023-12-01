@@ -34,7 +34,7 @@ router.get('/login', (req, res) => {
 router.get('/profile', (req, res) => {
     // Only online user can access beyond this point
     // console.log(req.user)
-    const user = 'seanlin5@gmail.com'
+    const user = req.user
     res.render('user/profile', { user:user })
 })
 
@@ -45,30 +45,7 @@ router.post('/login', passport.authenticate('local', {
     failureFlash: true
 }))
 
-// Render Update User Page
-router.get('/updateUser', (req, res) => {
-    res.render('user/updateUser')
-})
 
-// POST request to update user email
-router.post('/updateUser', checkLogin, (req, res) => {
-    const { email, confirmEmail } = req.body
-
-    if (email !== confirmEmail) {
-        res.render('user/updateEmail', {message: "Emails did not match!"})
-    } else if (email === req.user.user) {
-        res.render('user/updateEmail', {message: "Cannot Change to Previous Email!"})
-    } else {
-        return userService.changeEmail(req.user.user)
-            .then((changeEmailResult) => {
-                if (changeEmailResult) {
-                    res.redirect('user/profile')
-                } else {
-                    res.send("Failed to change Email!")
-                }
-            })
-    }
-})
 
 
 router.get('/deleteUser', (req, res) => {
@@ -172,7 +149,31 @@ router.get('/library', checkLogin, async (req, res) => {
     }
 })
 
+// Render Update User Page
+router.get('/updateUser', (req, res) => {
+    res.render('user/updateUser')
+})
 
+// POST request to update user email
+router.post('/updateUserName', (req, res) => {
+    const { name } = req.body
+
+    if (name == null) {
+        res.send("Bad userName Request")
+    }
+
+    return userService.changeUserName(req.user.user, name)
+        .then((result) => {
+            if (result) {
+                res.redirect('/user/profile')
+            } else {
+                res.send("Failed to update userName")
+            }
+        }).catch((error) => {
+            res.send(error)
+        })
+
+})
 
 
 
