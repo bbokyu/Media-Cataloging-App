@@ -12,21 +12,7 @@ const Type = Object.freeze({
 });
 
 router.get("/", async (req, res) => {
-    const author_data = await db.execute(`
-        SELECT C."id" AS author_id,
-                C."name" AS author_name,
-                COUNT(B."id") AS book_count 
-        FROM "Creator" C 
-        LEFT JOIN BOOK B 
-        ON C."id" = B.AUTHOR 
-        WHERE C."name" IS NOT NULL 
-        GROUP BY C."id", C."name"
-        ORDER BY book_count DESC
-        `);
-
-    console.log(author_data)
-
-    return res.render(root + "index", { root:root, authors:author_data }); 
+    return res.render(root + "index", { root:root }); 
 });
 
 router.get("/:id", async (req, res) => {
@@ -38,10 +24,11 @@ router.get("/:id", async (req, res) => {
         return res.render("notfound")
 
     const author_data = await db.execute(`SELECT * FROM "Creator" WHERE "id" = ${id}`);
+    const author_count = await db.execute(`SELECT COUNT(*) FROM BOOK WHERE AUTHOR = ${id}`)
 
     console.log(author_data);
 
-    return res.render(root + "author", { root:root, author:author_data[0] })
+    return res.render(root + "author", { root:root, author:author_data[0], author_count:author_count })
 });
 
 module.exports = router;
