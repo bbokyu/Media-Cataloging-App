@@ -1,9 +1,8 @@
 extends ../layout.pug
 
 block content
-    nav(class="flex nav")
-        h1(class="h1 mb-0") Profile
-        p Welcome #{user.user}!
+    div.profile-page
+        h1(class="h1 mb-0") #{user.user}'s Profile
 
         a(href='/user/updateUser') Update Account
         br
