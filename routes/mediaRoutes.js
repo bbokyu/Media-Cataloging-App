@@ -55,7 +55,7 @@ router.get("/film/:id", async (req, res) => {
     try {
         const film_data = await db.execute("SELECT * FROM \"Film\" WHERE \"id\" = " + id);
         console.log(film_data[0]);
-        res.render(root + "item", {root:root, film:film_data[0], type:Type.FILM});
+        res.render(root + "item", {root:root, film:film_data[0], type:Type.FILM, id:id});
     } catch (Error) {
         res.status(404).json({ error: "Media not found." });
     }

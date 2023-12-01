@@ -203,14 +203,16 @@ router.post("/submit", async (req, res) => {
 });
 
 router.post("/libstatus", async (req, res) => {
+    const id = req.body.mediaid;
+    const type = req.body.mediatype;
+    const media_table = (req.body.mediatype == 0 ? 'book_id' : 'film_id')
+
+    console.log("id:", id, "type:", type, "media_table:", media_table)
 
     if (typeof req.user == 'undefined') {
         return res.send(`<a href=/user/login> <button> Login to add to library</button></a>`)
     }
 
-    const id = req.body.mediaid;
-    const type = req.body.mediatype;
-    const media_table = (req.body.mediatype == 0 ? 'book_id' : 'film_id')
 
     const mediaquery = `SELECT "id" FROM "Media" WHERE "${media_table}" = ${id}`
 

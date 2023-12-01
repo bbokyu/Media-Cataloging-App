@@ -79,6 +79,9 @@ const clubApi = require('./api/clubs')
 app.use('/clubs', clubRoutes);
 app.use('/api/clubs', clubApi)
 
+// Author Routes
+const authorRoutes = require('./routes/authorRoutes')
+app.use('/authors', authorRoutes)
 
 
 
