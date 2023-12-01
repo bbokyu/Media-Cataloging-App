@@ -1,19 +1,21 @@
 extends ../layout.pug
 
 block content
-    h2= club[2]
-    p= club[6] + " members, " + club[4] + " comments in " + club[5] + " discussions."
+    h1= club[2]
+    p= club[6] + " members and " + club[5] + " discussions."
     p= club[3]
 
     - var requestvals = '{"club_id":' + club[0] + '}'
 
     button(type="button" hx-get="/api/clubs/subscriptionstatus" hx-trigger="load" hx-target="this" hx-swap="outerHTML" hx-vals=requestvals)
 
-    h3 Discussions
+    h2 Discussions
 
+    a(href="/clubs/dcreate/" + club[0])
+        button(style="width: fit-content") Create a new Discussion
 
     for discussion in discussions
-        table(style="margin-bottom: 10px")
+        table(style="margin-top: 10px")
             thead
                 tr
                     th

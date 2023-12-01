@@ -21,8 +21,6 @@ router.post("/create", async (req, res) => {
 
         const clubid = await db.execute(`SELECT "id" FROM "Club" c WHERE c."name" = '${title}' AND c."description" = '${description}'`);
 
-        console.log(clubid[0][0]);
-
         await db.insert(`INSERT INTO "member_of" m ("user_id", "club_id", "role") VALUES ('${userid}', ${clubid[0][0]}, 0)`);
 
         return res.send(`<div> Your club has been created!</div>`)
@@ -30,6 +28,45 @@ router.post("/create", async (req, res) => {
         return res.send(Error);
     }
 });
+
+router.post("/dcreate", async (req, res) => {
+    const title = req.body.discussion_title;
+    const clubid = req.body.club_id;
+    const userid = req.user.user;
+
+    try {
+        const query = `INSERT INTO "Discussion" ("club_id", "author_id", "content") VALUES (${clubid}, '${userid}', '${title}')`
+        console.log(query);
+        await db.insert(query);
+
+        const club_update = `UPDATE "Club" c SET c.DISCUSSION_COUNT = c.DISCUSSION_COUNT + 1 WHERE c."id" = ${clubid}`
+        await db.insert(club_update);
+
+        return res.send(`<div> Your discussion has been created! You can find it on the <a href="/clubs/${clubid}">discussion page</a></div>`)
+    } catch (Error) {
+        return res.send(`<div>There was a error posting your reply.  Please try again later and make sure you are logged in.</div>`);
+    }
+});
+
+router.post("/rcreate", async (req, res) => {
+    const content = req.body.content;
+    const did = req.body.discussion_id;
+    const userid = req.user.user;
+
+    console.log("Content:", content, "did:", did, "userid", userid);
+
+    try {
+        const query = `INSERT INTO "Reply" ("discussion_id", "author_id", "content") VALUES (${did}, '${userid}', '${content}')`
+        console.log(query)
+        await db.insert(query);
+        
+        return res.send(`<div> Your reply has been posted!</div>`)
+    } catch (Error) {
+        return res.send(`<div>There was a error posting your reply.  Please try again later and make sure you are logged in.</div>`)
+    }
+
+});
+
 
 router.post("/load", async (req, res) => {
 
