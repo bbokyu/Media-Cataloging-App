@@ -34,7 +34,7 @@ router.get('/login', (req, res) => {
 router.get('/profile', (req, res) => {
     // Only online user can access beyond this point
     // console.log(req.user)
-    const user = 'seanlin5@gmail.com'
+    const user = req.user
     res.render('user/profile', { user:user })
 })
 
@@ -45,36 +45,11 @@ router.post('/login', passport.authenticate('local', {
     failureFlash: true
 }))
 
-// Render Update User Page
-router.get('/updateUser', (req, res) => {
-    res.render('user/updateUser')
-})
 
-// POST request to update user email
-router.post('/updateUser', checkLogin, (req, res) => {
-    const { email, confirmEmail } = req.body
-
-    if (email !== confirmEmail) {
-        res.render('user/updateEmail', {message: "Emails did not match!"})
-    } else if (email === req.user.user) {
-        res.render('user/updateEmail', {message: "Cannot Change to Previous Email!"})
-    } else {
-        return userService.changeEmail(req.user.user)
-            .then((changeEmailResult) => {
-                if (changeEmailResult) {
-                    res.redirect('user/profile')
-                } else {
-                    res.send("Failed to change Email!")
-                }
-            })
-    }
-})
 
 
 router.get('/deleteUser', (req, res) => {
-
     res.render('user/deleteUser')
-
 })
 
 // Delete User
@@ -85,7 +60,7 @@ router.delete('/deleteUser', checkLogin, (req, res, next) => {
     return userService.deleteUser(user)
         .then((deleteResult) => {
             if (deleteResult) {
-                res.sendStatus(200);
+                res.redirect(303,'/user/logout')
             } else {
                 console.log("coffee");
             }
@@ -159,15 +134,45 @@ router.post('/register', async (req, res, next) => {
 });
 
 router.get('/library', checkLogin, async (req, res) => {
+    let { date_filter } = req.query
 
+    if (date_filter == null || date_filter < 0) {
+        date_filter = 1
+    }
     try {
-        const fav_book_data = await userService.grabFavouriteBooks(req.user.user)
-        const fav_film_data = await userService.grabFavouriteFilms(req.user.user)
+        const fav_book_data = await userService.grabFavouriteBooks(req.user.user, date_filter)
+        const fav_film_data = await userService.grabFavouriteFilms(req.user.user, date_filter)
         res.render('user/library', {books: fav_book_data, films: fav_film_data});
     } catch (error) {
         console.error("Error fetching library data:", error)
         res.status(500).json({ error: "An error occurred while fetching library data." });
     }
+})
+
+// Render Update User Page
+router.get('/updateUser', (req, res) => {
+    res.render('user/updateUser')
+})
+
+// POST request to update user email
+router.post('/updateUserName', (req, res) => {
+    const { name } = req.body
+
+    if (name == null) {
+        res.send("Bad userName Request")
+    }
+
+    return userService.changeUserName(req.user.user, name)
+        .then((result) => {
+            if (result) {
+                res.redirect('/user/profile')
+            } else {
+                res.send("Failed to update userName")
+            }
+        }).catch((error) => {
+            res.send(error)
+        })
+
 })
 
 

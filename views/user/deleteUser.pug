@@ -16,14 +16,15 @@ block content
                 headers: {
                     'Content-Type': 'application/json',
                 }
-            }).then(response => {
+            }).then(res => {
                     // if (!response.ok) {
                     //     throw new Error('Network response was not ok');
                     // }
                     // alert('Account Deleted!')
                     // response.redirect('/user/login')
-                    if (response.ok) {
+                    if (res.ok) {
                         alert("Account Deletion Successful!")
+                        window.location.href = '/user/logout'
                     }
                 })
         });

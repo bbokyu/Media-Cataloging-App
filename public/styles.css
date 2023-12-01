@@ -25,7 +25,7 @@ header {
     padding: 25px 25px;
     align-items: center;
     border-radius: 15px;
-    background-image: linear-gradient(270deg, rgba(218, 50, 50, 0.5), rgba(201, 176, 130, 0.5));
+    background-image: linear-gradient(270deg, rgba(242, 229, 213, 1), rgba(201, 176, 130, 0.5));
 }
 
 
@@ -60,7 +60,6 @@ header {
     width: 300px;
     color: rgba(140, 116, 70, 1);
     background-color: rgba(242, 229, 213, 1);
-    border: 3px solid rgba(140, 116, 70, 1);
     border-radius: 10px;
     padding: 20px 30px;
 }
@@ -77,17 +76,17 @@ header {
 }
 
 .input-box input {
-    width: 300px;
+    width: 292px;
     height: 100%;
     background: white;
     outline: none;
-    border: 3px solid rgba(140, 116, 70, 1);
+    border: 2px solid rgba(201, 176, 130, 0.8);
     border-radius: 8px;
 }
 
 .input-box i{
     position: relative;
-    left: 279px;
+    left: 272px;
     bottom: 29px;
 }
 
@@ -95,7 +94,7 @@ header {
     width: 100%;
     height: 45px;
     border-radius: 8px;
-    border: 3px solid rgba(140, 116, 70, 1);
+    border: 2px solid rgba(201, 176, 130, 0.8);
     cursor: pointer;
     font-weight: 600;
 
@@ -107,14 +106,13 @@ header {
     margin-right: auto;
     width: 550px;
     height: 50px;
-    color: rgba(140, 116, 70, 1);
 }
 
 .search-page .form-control{
     width: 100%;
     height: 100%;
     border-radius: 10px;
-    border: 3px solid rgba(140, 116, 70, 1);
+    border: 2px solid rgba(201, 176, 130, 0.8);
 }
 
 .search-page i{
@@ -131,7 +129,6 @@ header {
     width: 300px;
     color: rgba(140, 116, 70, 1);
     background-color: rgba(242, 229, 213, 1);
-    border: 3px solid rgba(140, 116, 70, 1);
     border-radius: 10px;
     padding: 20px 30px;
     align-items: center;
@@ -140,6 +137,68 @@ header {
 .register-box .input-box{
     height: 25px;
     margin-bottom: 15px;
+}
+
+.register-box .btn{
+    width: 100%;
+    height: 45px;
+    border-radius: 8px;
+    border: 2px solid rgba(201, 176, 130, 0.8);
+    cursor: pointer;
+    font-weight: 600;
+
+}
+
+/* Information Update */
+.update-info-box{
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    color: rgba(140, 116, 70, 1);
+    background-color: rgba(242, 229, 213, 1);
+    border-radius: 10px;
+    padding: 20px 30px;
+    align-items: center;
+}
+
+
+.entry-box .input-box{
+
+    width: 390px;
+    height: 25px;
+    background: white;
+    outline: none;
+    border: 2px solid rgba(201, 176, 130, 0.8);
+    border-radius: 8px;
+}
+
+.entry-box .save-box{
+    position: relative;
+    left: 338px;
+    bottom: 31px;
+}
+
+.entry-box .btn{
+    width: 60px;
+    height: 31px;
+    border-radius: 8px;
+    border: 2px solid rgba(201, 176, 130, 0.8);
+    cursor: pointer;
+    font-weight: 600;
+
+}
+
+/* Profile Page */
+
+.profile-page {
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    color: rgba(140, 116, 70, 1);
+    background-color: rgba(242, 229, 213, 1);
+    border-radius: 10px;
+    padding: 20px 30px;
+    align-items: center;
 }
 
 /* Media query for smaller screens */

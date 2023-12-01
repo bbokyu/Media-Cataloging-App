@@ -2,17 +2,21 @@ extends ../layout.pug
 
 
 block content
-    nav(class="flex nav")
+    div.update-info-box
         h1(class="h1 mb-0") Update your Information
         form(action='/user/updateUserName' method='POST')
             label New Name:
-            input(type='text' name='name' required)
-            input(type='submit' value='Change Name')
+            div.entry-box
+                input.input-box(type='text' name='name' required)
+                div.save-box
+                    button.btn(type='submit') Save
 
         form(action='/user/updateUserPassword' method='POST')
             label New Password:
-            input(type='password' name='password' required)
-            input(type='submit' value='Change Password')
+            div.entry-box
+                input.input-box(type='password' name='password' required)
+                div.save-box
+                    button.btn(type='submit') Save
 
 
 
