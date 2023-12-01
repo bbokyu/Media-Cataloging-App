@@ -31,6 +31,34 @@ router.post("/create", async (req, res) => {
     }
 });
 
+router.post("/load", async (req, res) => {
+
+    let query = `SELECT * FROM "Club"`;
+
+    const club_data = await db.execute(query);
+    
+    tablehtml = '';
+
+    for (let i = 0; i < club_data.length; i++) {
+        tablehtml += `<table style="margin-top: 10px">
+            <thead>
+                <tr>
+                    <th><a href="/clubs/${club_data[i][0]}">${club_data[i][2]}</a></th>
+                    <th align="right">Created ${club_data[i][1]}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>${club_data[i][3]}</td>
+                </tr>
+            </tbody>
+        </table>`
+    }
+
+    return res.send(tablehtml)
+
+});
+
 router.get("/subscriptionstatus", async (req, res) => {
     if (req.user == null) {
         return res.send(`<a href="/user/login"><button>Login to subscribe</button></a>`)
