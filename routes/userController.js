@@ -24,14 +24,14 @@ router.get('/login', (req, res) => {
     // console.log(req.session)
     // console.log(req.user)
     if (req.user) {
-        res.redirect('/user/profile')
+        return res.redirect('/user/profile')
     }
 
     res.render('user/login', { message: req.flash('error')});
 })
 
 // Render user profile page
-router.get('/profile', (req, res) => {
+router.get('/profile', checkLogin, (req, res) => {
     // Only online user can access beyond this point
     // console.log(req.user)
     const user = req.user
@@ -111,7 +111,11 @@ router.post('/register', async (req, res, next) => {
         res.status(400).send('User Register: Bad Register Request');
     }
 
+    // Check if email already is used:
+
+
     const salt = crypto.randomBytes(16);
+    
 
     crypto.pbkdf2(password, salt, 31000, 32, 'sha256', function (error, hashedPassword) {
 
@@ -150,12 +154,12 @@ router.get('/library', checkLogin, async (req, res) => {
 })
 
 // Render Update User Page
-router.get('/updateUser', (req, res) => {
+router.get('/updateUser', checkLogin, (req, res) => {
     res.render('user/updateUser')
 })
 
 // POST request to update user email
-router.post('/updateUserName', (req, res) => {
+router.post('/updateUserName', checkLogin, async (req, res) => {
     const { name } = req.body
 
     if (name == null) {
@@ -175,6 +179,34 @@ router.post('/updateUserName', (req, res) => {
 
 })
 
+// POST request to update user password
+router.post('/updateUserPassword', checkLogin, async (req, res) => {
+    const { password } = req.body
 
+    if (password == null) {
+        return res.status(400).send("Bad new Password Request");
+    }
+
+    const salt = crypto.randomBytes(16);
+
+    const hashedPassword = await new Promise((resolve, reject) => {
+        crypto.pbkdf2(password, salt, 31000, 32, 'sha256', (error, hashed) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(hashed);
+            }
+        });
+    });
+
+    const registerResult = await userService.changeUserPassword(req.user.user, salt, hashedPassword);
+
+    if (registerResult) {
+        return res.redirect('/user/login');
+    } else {
+        return res.status(500).json({ error: "Unable to update user in the database." });
+    }
+
+});
 
 module.exports = router;

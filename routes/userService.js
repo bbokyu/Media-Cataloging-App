@@ -21,7 +21,6 @@ async function registerUser(email, name, salt, hashed_password, postalCode, city
             );
         }
 
-
         const resultUser = await connection.execute(
             `INSERT INTO Users ("email", "fName", "dateCreated", "salt", "hashed_password", "postal_code")
              VALUES (:email, :name, current_date, :salt, :hashed_password, :postalCode)`,
@@ -75,9 +74,7 @@ async function grabFavouriteFilms(user, date_filter) {
         return [];
     });
 }
-// const selectFav = `SELECT * FROM "favourites" WHERE ("user_id" = '${req.user.user}')`
-// const favourites = await db.execute(selectFav);
-// console.log(favourites)
+
 
 async function changeUserName(user, newName) {
     return await db.withOracleDB(async (connection) => {
@@ -93,16 +90,6 @@ async function changeUserName(user, newName) {
     });
 }
 
-// async function updateUserPassword(user) {
-//     return await db.withOracleDB(async (connection) => {
-//         const result = await connection.execute('SELECT * FROM Users WHERE "email" = :email', [email])
-//         return true
-//     }).catch((error) => {
-//         console.log("Error change User Information!");
-//         console.log(error);
-//         return false;
-//     });
-// }
 
 // Delete User from Database and all its children relations
 async function deleteUser(user) {
@@ -120,6 +107,29 @@ async function deleteUser(user) {
 }
 
 
+async function changeUserPassword(email, salt, hashed_password) {
+
+    console.log("Updating user password with email: " + email);
+
+    return await db.withOracleDB(async (connection) => {
+
+        const resultUser = await connection.execute(
+            `UPDATE USERS SET "hashed_password" = :hashed_password, "salt" = :salt WHERE "email" = :email`,
+            [hashed_password, salt, email],
+            { autoCommit: true }
+        );
+
+
+            
+        console.log(resultUser)
+
+        return resultUser.rowsAffected && resultUser.rowsAffected > 0;
+
+    }).catch((error) => {
+        console.log(error)
+        return false;
+    });
+}
 
 module.exports = {
     grabUser,
@@ -127,5 +137,6 @@ module.exports = {
     grabFavouriteBooks,
     grabFavouriteFilms,
     deleteUser,
-    changeUserName
+    changeUserName,
+    changeUserPassword
 };
