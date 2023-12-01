@@ -51,9 +51,9 @@ async function grabUser(email) {
 }
 
 // Grab list of favourite media
-async function grabFavouriteBooks(user) {
+async function grabFavouriteBooks(user, date_filter) {
     return await db.withOracleDB(async (connection) => {
-        const fav_book_query = `select * from BOOK where BOOK."id" in (select m."book_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id")`
+        const fav_book_query = `select * from BOOK where BOOK."id" in (select m."book_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id") and BOOK."date" > ${date_filter}`
         const book_data = await connection.execute(fav_book_query)
         return book_data.rows
     }).catch((err) => {
@@ -64,9 +64,9 @@ async function grabFavouriteBooks(user) {
 }
 
 
-async function grabFavouriteFilms(user) {
+async function grabFavouriteFilms(user, date_filter) {
     return await db.withOracleDB(async (connection) => {
-        const fav_film_query = `select * from "Film" where "Film"."id" in (select m."film_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id")`
+        const fav_film_query = `select * from "Film" where "Film"."id" in (select m."film_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id") and "Film"."date" > ${date_filter}`
         const film_data = await connection.execute(fav_film_query)
         return film_data.rows
     }).catch((err) => {

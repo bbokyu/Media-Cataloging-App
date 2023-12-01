@@ -5,13 +5,17 @@ block content
     a(href="/clubs/create")
         button(style="max-width: 150px") Create a New club
 
+    if supermember > 0
+        p= `There are currently ${popular} popular clubs and ${supermember} super members!`
+    else 
+        p= `There are currently ${popular} popular clubs!` 
     for club in clubs
-        table(style="margin-top: 10px")
-            thead
-                tr
-                    th
-                        a(href="/clubs/" + club[0])= club[2]
-                    th(align="right")= club[1]
-            tbody
-                tr
-                    td= club[3]
+            table(style="margin-top: 10px")
+                thead
+                    tr
+                        th
+                            a(href="/clubs/" + club[0])= club[2]
+                        th(align="right")= club[1]
+                tbody
+                    tr
+                        td= club[3]

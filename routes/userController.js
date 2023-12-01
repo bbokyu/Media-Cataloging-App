@@ -159,16 +159,22 @@ router.post('/register', async (req, res, next) => {
 });
 
 router.get('/library', checkLogin, async (req, res) => {
+    let { date_filter } = req.query
 
+    if (date_filter == null || date_filter < 0) {
+        date_filter = 1
+    }
     try {
-        const fav_book_data = await userService.grabFavouriteBooks(req.user.user)
-        const fav_film_data = await userService.grabFavouriteFilms(req.user.user)
+        const fav_book_data = await userService.grabFavouriteBooks(req.user.user, date_filter)
+        const fav_film_data = await userService.grabFavouriteFilms(req.user.user, date_filter)
         res.render('user/library', {books: fav_book_data, films: fav_film_data});
     } catch (error) {
         console.error("Error fetching library data:", error)
         res.status(500).json({ error: "An error occurred while fetching library data." });
     }
 })
+
+
 
 
 

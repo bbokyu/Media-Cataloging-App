@@ -14,9 +14,11 @@ const Type = Object.freeze({
 router.get("/", async (req, res) => {
     const club_data = await db.execute(`SELECT * FROM "Club"`);
 
-    console.log(club_data)
+    const supermember = await db.execute(`SELECT COUNT(*) FROM USERS u WHERE NOT EXISTS ((SELECT c."id" FROM "Club" c) MINUS (SELECT mo."club_id" FROM "member_of" mo WHERE mo."user_id" = u."email"))`);
 
-    return res.render(root + "index", { root:root, clubs:club_data }); 
+    const popular = await db.execute(`SELECT COUNT(*) as club_count FROM "Club" WHERE member_count > (SELECT AVG(member_count) FROM "Club") GROUP BY member_count`);
+
+    return res.render(root + "index", { root:root, clubs:club_data, popular:popular, supermember:supermember }); 
 });
 
 router.get("/create", async (req, res) => {
@@ -26,17 +28,11 @@ router.get("/create", async (req, res) => {
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
 
-    console.log(Number(id))
-
     if (isNaN(Number(id)))
         return res.render("notfound")
 
-    const club_data = await db.execute(`SELECT * FROM "Club" WHERE "id" = ${id}`);
+    const club_data = await db.execute(`SELECT "id", "date", "name", "description", COMMENT_COUNT, DISCUSSION_COUNT, MEMBER_COUNT FROM "Club" WHERE "id" = ${id}`);
     const discussion_data = await db.execute(`SELECT * FROM "Discussion" d WHERE d."club_id" = ${id} ORDER BY d."date" DESC`)
-
-    console.log(discussion_data);
-
-
 
     return res.render(root + "club", { root:root, club:club_data[0], discussions:discussion_data })
 });
@@ -51,8 +47,6 @@ router.get("/:id/:did/", async(req, res) => {
     const discussion_name = await db.execute(`SELECT d."content" FROM "Discussion" d WHERE d."id" = ${did}`)
 
     const reply_data = await db.execute(`SELECT * FROM "Reply" r WHERE r."discussion_id" = ${did} ORDER BY r."date" ASC`);
-
-    console.log(reply_data);
 
     return res.render(root + "discussion", { root:root, discussion_name:discussion_name, replies:reply_data })
 });
