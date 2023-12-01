@@ -1,17 +1,34 @@
 extends ../layout.pug
 
-
 block content
-    nav(class="flex nav")
-        h1(class="h1 mb-0") Login
+    div.login-box
         form(action='/user/login' method='POST')
-            label Email:
-            input(type='email' name='email' required)
-            label Password:
-            input(type='password' name='password' required)
-            input(type='submit' value='Login')
+            h1 Login
+            div.input-box
+                input(type='email' name='email' placeholder="Email" required)
+                i.bx.bxs-envelope
+            div.input-box
+                input(type='password' name='password' placeholder="Password" required)
+                i.bx.bxs-lock-alt
+            button.btn(type='submit') Login
+            a.register(href='/user/register') Sign Up
 
     if message[0] != null
         p #{message[0]}
     else
         p Howdy!
+
+    //block content
+    //    nav(class="flex nav")
+    //        h1(class="h1 mb-0") Login
+    //        form(action='/user/login' method='POST')
+    //            label Email:
+    //            input(type='email' name='email' required)
+    //            label Password:
+    //            input(type='password' name='password' required)
+    //            input(type='submit' value='Login')
+    //        a(href='/user/register') Sign Up
+    //    if message[0] != null
+    //        p #{message[0]}
+    //    else
+    //        p Howdy!

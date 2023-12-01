@@ -1,0 +1,19 @@
+extends ../layout.pug
+
+
+block content
+    nav(class="flex nav")
+        h1(class="h1 mb-0") Update your Information
+        form(action='/user/updateUserName' method='POST')
+            label Name:
+            input(type='text' name='name' required)
+            input(type='submit' value='Change Name')
+
+        form(action='/user/updateUserPassword' method='POST')
+            label Name:
+            input(type='password' name='password' required)
+            input(type='submit' value='Change Password')
+
+
+
+
