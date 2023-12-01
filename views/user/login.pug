@@ -13,10 +13,10 @@ block content
             button.btn(type='submit') Login
             a.register(href='/user/register') Sign Up
 
-    if message[0] != null
-        p #{message[0]}
-    else
-        p Howdy!
+        if message[0] != null
+            p #{message[0]}
+        else
+            p Howdy!
 
     //block content
     //    nav(class="flex nav")
