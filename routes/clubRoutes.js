@@ -29,6 +29,14 @@ router.get("/dcreate/:id", async (req, res) => {
     return res.render(root + "dcreate", { root:root, club_id: req.params.id});
 });
 
+router.get("/rcreate/:did", async (req, res) => {
+    const did = req.params.did;
+
+    const discussion_name = await db.execute(`SELECT d."content" FROM "Discussion" d WHERE d."id" = ${did}`)
+
+    return res.render(root + "rcreate", { root:root, did:did, discussiontitle:discussion_name});
+});
+
 router.get("/:id", async (req, res) => {
     const id = req.params.id;
 
@@ -52,7 +60,7 @@ router.get("/:id/:did/", async(req, res) => {
 
     const reply_data = await db.execute(`SELECT * FROM "Reply" r WHERE r."discussion_id" = ${did} ORDER BY r."date" ASC`);
 
-    return res.render(root + "discussion", { root:root, discussion_name:discussion_name, replies:reply_data })
+    return res.render(root + "discussion", { root:root, discussion_name:discussion_name, replies:reply_data, did:did })
 });
 
 

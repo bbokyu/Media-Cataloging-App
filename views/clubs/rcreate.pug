@@ -1,0 +1,33 @@
+extends ../layout.pug
+
+block content
+    h2 Post a new reply to "#{discussiontitle}"
+
+    mixin create_form
+        form(
+            hx-swap="outerHTML" 
+            hx-target="this" 
+            hx-post="/api/clubs/rcreate"
+            )
+            input(
+                name="discussion_id"
+                type="hidden"
+                value= did
+            )
+            label Reply
+            br
+            input(
+                type="textarea"
+                name="content"
+            )
+            input(
+            value="Submit" 
+            type="submit"
+            )    
+
+    if (user)
+        +create_form
+    else
+        p You have to be logged in to post a new reply.
+        a(href="/user/login")
+            button Login
