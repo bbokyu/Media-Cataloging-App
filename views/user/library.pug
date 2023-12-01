@@ -3,6 +3,7 @@ extends ../layout
 block content
     nav(class="flex nav")
         h1(class="h1 mb-0") My Library
+        h2(clas="h2 mb-0") Books
         table(class="table table-striped")
             thead
                 tr
@@ -14,7 +15,22 @@ block content
                         td
                             a(href=`/media/book/` + book[0]) #{book[1]}
                         td= book[2]
-
+        h2(clas="h2 mb-0") Films
+        table(class="table table-striped")
+            thead
+                tr
+                    th(class="table-secondary") Title
+                    th(class="table-secondary") Date
+                    th(class="table-secondary") Genres
+                    th(class="table-secondary") Duration
+            tbody(id="books" hx-target="closest tr" hx-swap="outerHTML")
+                each film in films
+                    tr
+                        td
+                            a(href=`/media/film/` + film[0]) #{film[1]}
+                        td= film[2]
+                        td= film[4]
+                        td= film[5]
 
 
     if message != null

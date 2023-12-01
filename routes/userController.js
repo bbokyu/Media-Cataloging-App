@@ -160,26 +160,17 @@ router.post('/register', async (req, res, next) => {
 });
 
 router.get('/library', checkLogin, async (req, res) => {
-    const user = req.user
-    return userService.grabFavourites(req.user.user)
-        .then((fav_book_data) => {
-            res.render('user/library', {books: fav_book_data});
-        })
-        .catch((error) => {
-            res.render('user/library', { message: "Unable to grab Library!"});
-        })
+
+    try {
+        const fav_book_data = await userService.grabFavouriteBooks(req.user.user)
+        const fav_film_data = await userService.grabFavouriteFilms(req.user.user)
+        res.render('user/library', {books: fav_book_data, films: fav_film_data});
+    } catch (error) {
+        console.error("Error fetching library data:", error)
+        res.status(500).json({ error: "An error occurred while fetching library data." });
+    }
 })
 
-router.get('/library', checkLogin, async (req, res) => {
-    const user = req.user
-    return userService.grabFavourites(req.user.user)
-        .then((fav_book_data) => {
-            res.render('user/library', {books: fav_book_data});
-        })
-        .catch((error) => {
-            res.render('user/library', { message: "Unable to grab Library!"});
-        })
-})
 
 
 module.exports = router;
