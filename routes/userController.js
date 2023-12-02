@@ -112,7 +112,12 @@ router.post('/register', async (req, res, next) => {
     }
 
     // Check if email already is used:
-
+    
+    const duplicateEmail = await userService.checkEmail(email)
+    if (duplicateEmail) {
+        req.flash("error", "Email already in use. Try another email");
+        return res.status(200).redirect('/user/login')
+    }
 
     const salt = crypto.randomBytes(16);
     
@@ -189,23 +194,26 @@ router.post('/updateUserPassword', checkLogin, async (req, res) => {
 
     const salt = crypto.randomBytes(16);
 
-    const hashedPassword = await new Promise((resolve, reject) => {
-        crypto.pbkdf2(password, salt, 31000, 32, 'sha256', (error, hashed) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(hashed);
-            }
-        });
+    crypto.pbkdf2(password, salt, 31000, 32, 'sha256', function (error, hashedPassword) {
+
+        if (error) {
+            return next(error)
+        }
+
+        return userService.changeUserPassword(req.user.user, salt, hashedPassword)
+            .then((registerResult) => {
+                if (registerResult) {
+                    req.flash("error", "Password Change Successful. Please log in.");
+                    return res.status(200).redirect('/user/login')
+                } else{
+                    res.status(500).json({ error: "Unable to update password to database." });
+                }
+            }).catch((error) => {
+                return res.status(500).json({ error: "Unable to update user password in the database." });
+            })
     });
+    
 
-    const registerResult = await userService.changeUserPassword(req.user.user, salt, hashedPassword);
-
-    if (registerResult) {
-        return res.redirect('/user/login');
-    } else {
-        return res.status(500).json({ error: "Unable to update user in the database." });
-    }
 
 });
 

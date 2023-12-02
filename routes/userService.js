@@ -52,7 +52,7 @@ async function grabUser(email) {
 // Grab list of favourite media
 async function grabFavouriteBooks(user, date_filter) {
     return await db.withOracleDB(async (connection) => {
-        const fav_book_query = `select * from BOOK where BOOK."id" in (select m."book_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id") and BOOK."date" > ${date_filter}`
+        const fav_book_query = `SELECT * from BOOK where BOOK."id" in (select m."book_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id") and BOOK."date" > ${date_filter}`
         const book_data = await connection.execute(fav_book_query)
         return book_data.rows
     }).catch((err) => {
@@ -65,7 +65,7 @@ async function grabFavouriteBooks(user, date_filter) {
 
 async function grabFavouriteFilms(user, date_filter) {
     return await db.withOracleDB(async (connection) => {
-        const fav_film_query = `select * from "Film" where "Film"."id" in (select m."film_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id") and "Film"."date" > ${date_filter}`
+        const fav_film_query = `SELECT * from "Film" where "Film"."id" in (select m."film_id" from "favourites" f, "Media" m where f."user_id" = '${user}' and f."media_id" = m."id") and "Film"."date" > ${date_filter}`
         const film_data = await connection.execute(fav_film_query)
         return film_data.rows
     }).catch((err) => {
@@ -131,6 +131,24 @@ async function changeUserPassword(email, salt, hashed_password) {
     });
 }
 
+async function checkEmail(email) {
+
+    return await db.withOracleDB(async (connection) => {
+
+        const result = await connection.execute(
+            `SELECT * from USERS WHERE "email" = :email`,
+            [email]
+        );
+        
+        console.log(result.rows.length)
+        return result.rows.length > 0;
+
+    }).catch((error) => {
+        console.log(error)
+        return false;
+    });
+
+}
 module.exports = {
     grabUser,
     registerUser,
@@ -138,5 +156,6 @@ module.exports = {
     grabFavouriteFilms,
     deleteUser,
     changeUserName,
-    changeUserPassword
+    changeUserPassword,
+    checkEmail
 };
